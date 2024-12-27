@@ -150,6 +150,11 @@ const QuotationManagement = () => {
             status: "Rejected",
           });
 
+          const quotation = quotations.find((q) => q.id === quotationId); // Find the updated quotation
+          const productName = quotation.product?.productName || "Unknown Product";
+          const orderNumber = quotation.orderNumber;
+          const userId = quotation.userId;
+          
           await addDoc(collection(db, "Notification"), {
             message: `Your Quotation #${orderNumber} for ${productName} has been Rejected. Please rebiew and resubmit.`,
             createdAt: new Date(),

@@ -213,7 +213,6 @@ const ProjectStatusPage = () => {
               {project.status === "Rejected" && (
                 <button
                   className="delete-request-button"
-                  onClick={() => handleDeleteRequest(project.id)}
                 >
                   Delete Request
                 </button>

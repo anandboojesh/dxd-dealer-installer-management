@@ -76,8 +76,6 @@ const Navbar = ({userRole, handleLogout}) => {
           <>
           <li className={`navbar-item ${isActive("/installer-dashboard") ? "active" : ""}`}><Link to="/installer-dashboard">Dashboard</Link></li>
           <li className="navbar-item"><Link to="/project">Projects</Link></li>
-          <li className="navbar-item"><Link to="/status">My Projects</Link></li>
-          <li className="navbar-item"><Link to="/assignment">Assignments</Link></li>
           </>
         )}
 
