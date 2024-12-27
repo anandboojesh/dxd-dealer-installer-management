@@ -1,0 +1,257 @@
+.order-management {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    overflow-x: auto;
+  }
+  
+  .order-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+   
+  }
+  
+  .new-product-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-filter {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .filter-sort button {
+    margin-left: 10px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .orders-table {
+    border-collapse: collapse;
+    table-layout: fixed; 
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .orders-table th, .orders-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .orders-table .status {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  .orders-table .status.approved {
+    color: green;
+  }
+  
+  .orders-table .status.pending {
+    color:  #FF8C00;
+    background-color: rgba(255, 165, 0, 0.3) /* 30% opacity */
+    ;
+  }
+  
+  .orders-table .status.rejected{
+    color:  #8B0000;
+    background-color: rgba(255, 0, 0, 0.2) /* 30% opacity */
+    ;
+  }
+
+  /* Style for Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status-badge.approved {
+  background-color: #28a745; /* Green for Approved */
+}
+
+.status-badge.pending {
+  background-color: #ffc107; /* Yellow for Pending */
+}
+
+.status-badge.rejected {
+  color: #dc3545; /* Red for Rejected */
+}
+
+
+
+  
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .pagination .active {
+    background-color: #007bff;
+    color: white;
+  }
+
+  /* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal */
+.edit-order-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%; /* Adjust width to fit better on smaller screens */
+  max-width: 500px; /* Max width for larger screens */
+  max-height: 90%; /* Prevent the modal from becoming too tall */
+  overflow-y: auto; /* Allows vertical scrolling if content exceeds max height */
+  box-sizing: border-box; /* Include padding in the width/height calculation */
+}
+
+/* Form */
+.edit-order-form .form-group {
+  margin-bottom: 15px;
+}
+
+.edit-order-form label {
+  display: block;
+  font-weight: bold;
+}
+
+.edit-order-form input,
+.edit-order-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-order-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-actions button:hover {
+  background-color: #0056b3;
+}
+
+/* Action Menu Container */
+.action-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Space between buttons */
+}
+
+/* Action Menu Buttons */
+.action-menu button {
+  background-color: #007bff; /* Primary button color */
+  color: white; /* Button text color */
+  border: none; /* No border */
+  padding: 8px 12px; /* Padding inside the button */
+  font-size: 14px; /* Font size for text */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+/* Hover State */
+.action-menu button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Active State */
+.action-menu button:active {
+  background-color: #003f7f; /* Even darker blue when clicked */
+}
+
+/* Disabled State */
+.action-menu button:disabled {
+  background-color: #cccccc; /* Grey color for disabled buttons */
+  cursor: not-allowed; /* Show not-allowed cursor */
+}
+
+/* Align action menu buttons horizontally (optional) */
+.action-menu.horizontal {
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: #007bff;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  margin: 15px 0;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  text-align: center;
+}
+
+  
