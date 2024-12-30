@@ -4,6 +4,8 @@ import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
 import "../styles/components/AdminDashboard.css";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend,ArcElement,PointElement,LineElement, // Import LineElement
@@ -13,8 +15,7 @@ import {
 ChartJS.register(
   CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend,ArcElement,PointElement,LineElement // Register LineElement for the Line chart
 );
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
 
 const AdminDashboard = () => {
   const [quotations, setQuotations] = useState([]);
