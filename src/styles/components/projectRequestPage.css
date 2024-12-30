@@ -1,9 +1,18 @@
+:root {
+  --primary-color: #4a4e69;
+  --secondary-color: #22223b;
+  --accent-color: #9a8c98;
+  --background-light: #f2e9e4;
+  --text-dark: #2d2d2d;
+  --text-light: #ffffff;
+}
+
 /* General Page Styles */
 .project-request-page {
+  font-family: "Roboto", sans-serif;
   padding: 20px;
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-  color: #2c3e50;
+  background-color: var(--background-light);
+  color: var(--text-dark);
   min-height: 100vh;
   overflow-x: auto; /* Prevent horizontal overflow */
 }
@@ -37,8 +46,8 @@ h1 {
 }
 
 .project-table th {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  color: white;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: var(--text-light);
   font-weight: 600;
   text-transform: uppercase;
   
@@ -72,13 +81,20 @@ h1 {
 
 .assign-btn {
   background: linear-gradient(90deg, #56ab2f, #a8e063);
-  color: white;
-  box-shadow: 0 4px 8px rgba(86, 171, 47, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .assign-btn:hover {
   background: linear-gradient(90deg, #4caf50, #9ccc65);
-  box-shadow: 0 6px 12px rgba(86, 171, 47, 0.4);
+  transform: scale(1.05);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .reject-btn {

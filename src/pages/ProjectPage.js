@@ -38,7 +38,9 @@ const ProjectsPage = () => {
 
   const filteredProjects = projects.filter(project => {
     return (
-      project.clientName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      project.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.product?.productName.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+      &&
       (statusFilter ? project.status === statusFilter : true)
     );
   });

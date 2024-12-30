@@ -128,6 +128,11 @@ const ProductDetailPage = () => {
     { id: "uv-filtered", name: "UV-Filtered Glass", img: img2 },
   ];
 
+  const updatedFeatures = {
+    ...selectedFeatures,
+    glassType: selectedGlazing ||null,
+};
+
   const CLIENT_ID = "743175460976-g2iv8inaqrpj10g4elt0kmh3cjgmqfnv.apps.googleusercontent.com";
   const API_KEY = "AIzaSyBdz9koMR5SPYZ5LUrUEgdy2NY55ADtTVE";
   const SCOPES = "https://www.googleapis.com/auth/drive.file";
@@ -257,11 +262,12 @@ const ProductDetailPage = () => {
         productName: product.name,
         height,
         width,
+        features: updatedFeatures,
         additionalRequirements: additionalReq || "",
         glazingOption: selectedGlazing,
         uploadedFileURL: fileURL || null,
       },
-      features: selectedFeatures,
+      features: updatedFeatures,
       userId: auth.currentUser?.uid || "Anonymous",
       orderNumber,
       timestamp: new Date().toISOString(),
@@ -453,36 +459,40 @@ const ProductDetailPage = () => {
 
       {/* Quotation Form Popup */}
       {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
+        <div className="quotation-popup">
+          <div className="quotation-popup-content">
             <h2>Quotation Form</h2>
-            <div className="form-section">
+            <div className="quotation-form-section">
               <h3>Client Details</h3>
-              <label>
+              <label className="quotation-label">
                 Client Name:
                 <input
                   type="text"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   required
+                  className="quotation-input"
+                  
                 />
               </label>
-              <label>
+              <label className="quotation-label">
                 Client Email:
                 <input
+                className="quotation-input"
                   type="email"
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
                   required
                 />
               </label>
-              <label>
+              <label className="quotation-label">
                 Client Phone:
                 <input
                   type="tel"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
                   required
+                  className="quotation-input"
                 />
               </label>
               <label>
@@ -492,6 +502,7 @@ const ProductDetailPage = () => {
                   value={clientCity}
                   onChange={(e) => setClientCity(e.target.value)}
                   required
+                  className="quotation-input"
                 />
               </label>
               <label>
@@ -505,7 +516,7 @@ const ProductDetailPage = () => {
               </label>
             </div>
 
-            <div className="form-section">
+            <div className="quotation-form-section">
               <h3>Product Details</h3>
               <label>
                 Selected Product:
@@ -574,7 +585,7 @@ const ProductDetailPage = () => {
       </label>
       ))}
 
-            <div className="form-section">
+            <div className="quotation-form-section">
               <h3>Upload Additional Details:</h3>
               <input
                   type="file"
@@ -583,15 +594,15 @@ const ProductDetailPage = () => {
                 />
               <button onClick={handleFileUploadToDrive}>Upload</button>
             </div>
-            <div className="form-actions">
+            <div className="quotation-form-actions">
               <button
-                className="close-button"
+                className="quotation-close-button"
                 onClick={() => setShowPopup(false)}
               >
                 Close
               </button>
               <button
-                className="submit-button"
+                className="quotation-submit-button"
                 onClick={handleSubmitQuotation}
               >
                 Submit Quotation

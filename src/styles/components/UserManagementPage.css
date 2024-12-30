@@ -20,6 +20,16 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .user-management-button{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+  }
   
   .search-bar {
     margin-bottom: 20px;

@@ -96,6 +96,7 @@ const ProductPage = () => {
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [additionalReq, setAdditionalReq] = useState('');
+  const [productscount, setProductscount] = useState([]);
   const itemsPerPage = 8; // Number of products per page
  
   const navigate = useNavigate()
@@ -274,7 +275,7 @@ const ProductPage = () => {
         <h3>{product.name}</h3>
         <p>{product.category}</p>
       </div>
-            <button onClick={() => navigate(`/product-details/${product.id}`)}>Add to Quotation</button>
+            <button onClick={() => addToCart(product)}>Add to Quotation</button>
           </div>
         ))}
       </div>
@@ -337,121 +338,126 @@ const ProductPage = () => {
 
       {/* Quotation Form Popup */}
       {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>Quotation Form</h2>
+  <>
+    {/* Overlay to cover the background */}
+    <div className="quotation-form-overlay"></div>
 
-            {/* Tabs for Switching Between Products */}
-            <div className="tabs">
-              {cart.map((product, index) => (
-                <button
-                  key={product.id}
-                  className={activeTab === index ? "active-tab" : ""}
-                  onClick={() => setActiveTab(index)}
-                >
-                  {product.name}
-                </button>
-              ))}
-            </div>
+    {/* Modal Content */}
+    <div className="quotation-form-popup">
+      <div className="quotation-form-popup-content">
+        <h2>Quotation Form</h2>
 
-            {/* Client Details Section */}
-            <div className="form-section">
-              <h3>Client Details</h3>
-              <label>
-                Client Name:
+        {/* Tabs for Switching Between Products */}
+        <div className="quotation-form-tabs">
+          {cart.map((product, index) => (
+            <button
+              key={product.id}
+              className={`quotation-form-tab-button ${activeTab === index ? "quotation-form-active-tab" : ""}`}
+              onClick={() => setActiveTab(index)}
+            >
+              {product.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Client Details Section */}
+        <div className="quotation-form-client-section">
+          <h3>Client Details</h3>
+          <div className="quotation-form-group">
+            <label>Client Name:</label>
+            <input
+              type="text"
+              required
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              placeholder="Enter your name"
+            />
+          </div>
+          <div className="quotation-form-group">
+            <label>Client Email:</label>
+            <input
+              type="email"
+              required
+              value={clientEmail}
+              onChange={(e) => setClientEmail(e.target.value)}
+              placeholder="Enter your email"
+            />
+          </div>
+          <div className="quotation-form-group">
+            <label>Client Phone:</label>
+            <input
+              type="tel"
+              required
+              value={clientPhone}
+              onChange={(e) => setClientPhone(e.target.value)}
+              placeholder="Enter your phone number"
+            />
+          </div>
+          <div className="quotation-form-group">
+            <label>City:</label>
+            <input
+              type="text"
+              required
+              value={clientCity}
+              onChange={(e) => setClientCity(e.target.value)}
+              placeholder="Enter your city"
+            />
+          </div>
+          <div className="quotation-form-group">
+            <label>Postal Code:</label>
+            <input
+              type="text"
+              required
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              placeholder="Enter postal code"
+            />
+          </div>
+        </div>
+
+        {/* Product Details Section */}
+        <div className="quotation-form-product-section">
+          <h3>Product Details & Features</h3>
+          {cart.length > 0 && (
+            <div className="quotation-form-product-details">
+              <div className="quotation-form-group">
+                <label>Selected Product:</label>
+                <input type="text" value={cart[activeTab]?.name} readOnly />
+              </div>
+              <div className="quotation-form-group">
+                <label>Height (ft):</label>
                 <input
-                  type="text"
+                  type="number"
                   required
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  placeholder="Enter height"
                 />
-              </label>
-              <label>
-                Client Email:
+              </div>
+              <div className="quotation-form-group">
+                <label>Width (ft):</label>
                 <input
-                  type="email"
+                  type="number"
                   required
-                  value={clientEmail}
-                  onChange={(e) => setClientEmail( e.target.value)}
+                  value={width}
+                  onChange={(e) => setWidth(e.target.value)}
+                  placeholder="Enter width"
                 />
-              </label>
-              <label>
-                Client Phone:
-                <input
-                  type="tel"
-                  required
-                  value={clientPhone}
-                  onChange={(e) => setClientPhone(e.target.value)}
-                />
-              </label>
-              <label>
-                City:
-                <input
-                  type="text"
-                  required
-                  value={clientCity}
-                  onChange={(e) => setClientCity(e.target.value)}
-                />
-              </label>
-              <label>
-                Postal Code:
-                <input
-                  type="text"
-                  required
-                  value={postalCode}
-                  onChange={(e) => setPostalCode( e.target.value)}
-                />
-              </label>
-            </div>
-
-            {/* Product Details Section */}
-            <div className="form-section">
-              <h3>Product Details & Features</h3>
-
-              {/* Form for Active Product */}
-              {cart.length > 0 && (
-                <div className="product-form">
-                  <label>
-                    Selected Product:
-                    <input type="text" value={cart[activeTab]?.name} readOnly/>
-                  </label>
-                  <label>
-                    Height (ft):
-                    <input
-                      type="number"
-                      required
-                      value={height}
-                      onChange={(e) =>
-                        setHeight( e.target.value)
-                      }
-                    />
-                  </label>
-                  <label>
-                    Width (ft):{width}
-                    <input
-                      type="number"
-                      required
-                      value={width}
-                      onChange={(e) =>
-                        setWidth( e.target.value)
-                      }
-                    />
-                  </label>
-
-                  {Object.entries(cart[activeTab]?.features || {}).map(([featureKey, featureValues]) => {
-        if (featureKey === "dimensions") return null; // Skip dimensions
-
-        return (
-          <>
-          <div key={featureKey} className="feature-section">
-            <label>{featureKey.replace(/([A-Z])/g, " $1")}: </label>
-
-            {/* Handle single or multiple options */}
+              </div>
+              {/* Features Section */}
+              {Object.entries(cart[activeTab]?.features || {}).map(
+                ([featureKey, featureValues]) => {
+                  if (featureKey === "dimensions") return null;
+                  return (
+                    <>
+                    <div key={featureKey} className="quotation-form-group">
+                      <label>{featureKey.replace(/([A-Z])/g, " $1")}:</label>
+                      {/* Handle single or multiple options */}
             {Array.isArray(featureValues) && featureValues.length === 1 ? (
         <input type="text" value={featureValues[0]} readOnly />
       ) : Array.isArray(featureValues) ? (
-        featureKey === "operation" || featureKey === "accessories" || featureKey === "additionalFeatures" || featureKey === "additionalItems" ? (
-          <div className="checkbox-group">
+         featureKey === "accessories" || featureKey === "additionalFeatures" || featureKey === "additionalItems" ? (
+          <div className="quotation-form-checkbox-group">
             {featureValues.map((option) => (
               <label key={option}>
                 <input
@@ -508,33 +514,36 @@ const ProductPage = () => {
           </>
         );
       })}
-                  <label>
-                    Additional Requirements:
-                    <textarea
-                        value={additionalReq}
-                      onChange={(e) =>
-                        setAdditionalReq(
-                          e.target.value
-                        )
-                      }
-                    />
-                  </label>
-                </div>
-              )}
-            </div>
 
-            <button className="close-button" onClick={() => setShowPopup(false)}>
-              Close
-            </button>
-            <button
-              className="submit-button"
-              onClick={() => handleSubmitProductForm(cart[activeTab]?.id)}
-            >
-              Submit Product
-            </button>
-          </div>
+              <div className="quotation-form-group">
+                <label>Additional Requirements:</label>
+                <textarea
+                  value={additionalReq}
+                  onChange={(e) => setAdditionalReq(e.target.value)}
+                  placeholder="Add any additional requests here"
+                />
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Actions */}
+        <div className="quotation-form-actions">
+          <button className="quotation-form-close-button" onClick={() => setShowPopup(false)}>
+            Close
+          </button>
+          <button
+            className="quotation-form-submit-button"
+            onClick={() => handleSubmitProductForm(cart[activeTab]?.id)}
+          >
+            Submit Quotation
+          </button>
+        </div>
+      </div>
+    </div>
+  </>
+)}
+
 
     
     </div>

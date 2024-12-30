@@ -53,9 +53,9 @@ const Navbar = ({userRole, handleLogout}) => {
         {userRole === "Admin" && (
           <>
             <li className={`navbar-item ${isActive("/admin-dashboard") ? "active" : ""}`}><Link to="/admin-dashboard">Dashboard</Link></li>
-            <li className="navbar-item"><Link to="/Quotation-management">Quotations</Link></li>
-            <li className="navbar-item"><Link to="/project-request">Project Requests</Link></li>
-            <li className="navbar-item"><Link to="/products">Products</Link></li>
+            <li className={`navbar-item ${isActive("/Quotation-management") ? "active" : ""}`}><Link to="/Quotation-management">Quotations</Link></li>
+            <li className={`navbar-item ${isActive("/project-request") ? "active" : ""}`}><Link to="/project-request">Project Requests</Link></li>
+            <li className={`navbar-item ${isActive("/products") ? "active" : ""}`}><Link to="/products">Products</Link></li>
          
           </>
         )}
@@ -63,11 +63,11 @@ const Navbar = ({userRole, handleLogout}) => {
         {userRole === "Dealer" && (
           <>
             <li className={`navbar-item ${isActive("/dealer-dashboard") ? "active" : ""}`}><Link to="/dealer-dashboard">Dashboard</Link></li>
-            <li className="navbar-item"><Link to="">Quotations</Link></li>
-            <li className="navbar-item"><Link to="/referral">Referral</Link></li>
-            <li className="navbar-item"><Link to="/reward">Rewards</Link></li>
-            <li className="navbar-item"><Link to="/products">Products</Link></li>
-            <li className="navbar-item"><Link to="/Orders">Orders</Link></li>
+            <li className={`navbar-item ${isActive("") ? "active" : ""}`}><Link to="">Quotations</Link></li>
+            <li className={`navbar-item ${isActive("/referral") ? "active" : ""}`}><Link to="/referral">Referral</Link></li>
+            <li className={`navbar-item ${isActive("/reward") ? "active" : ""}`}><Link to="/reward">Rewards</Link></li>
+            <li className={`navbar-item ${isActive("/products") ? "active" : ""}`}><Link to="/products">Products</Link></li>
+            <li className={`navbar-item ${isActive("/Orders") ? "active" : ""}`}><Link to="/Orders">Orders</Link></li>
    
           </>
         )}
@@ -75,7 +75,8 @@ const Navbar = ({userRole, handleLogout}) => {
         {userRole === "Installer" && (
           <>
           <li className={`navbar-item ${isActive("/installer-dashboard") ? "active" : ""}`}><Link to="/installer-dashboard">Dashboard</Link></li>
-          <li className="navbar-item"><Link to="/project">Projects</Link></li>
+          <li className={`navbar-item ${isActive("/project") ? "active" : ""}`}><Link to="/project">Projects</Link></li>
+          <li className={`navbar-item ${isActive("/status") ? "active" : ""}`}><Link to="/status">Status</Link></li>
           </>
         )}
 

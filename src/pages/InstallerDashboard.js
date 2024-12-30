@@ -302,7 +302,7 @@ const InstallerDashboard = () => {
               <button onClick={() => handleStatusSelect(project.id, "Installation Started")}>
                 Installation Started
               </button>
-              <button onClick={() => handleStatusSelect(project.id, "On-Going")}>
+              <button onClick={() => handleStatusSelect(project.id, "Ongoing")}>
                 On-Going
               </button>
               <button onClick={() => handleStatusSelect(project.id, "Completed")}>
@@ -333,10 +333,10 @@ const InstallerDashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
+    <div className="installer-dashboard-container">
+  
         <h1>Installer Dashboard</h1>
-      </div>
+ 
       {loading ? (
         <p className="loading">Loading...</p>
       ) : error ? (
@@ -348,8 +348,10 @@ const InstallerDashboard = () => {
           
 
           {/* Projects Section */}
-          <div className="dashboard-section projects-section">
+          <div className="installer-dashboard-section">
+            <div className="installer-dashboard-header">
             <h3>Task Summary</h3>
+            </div>
             <div className="container1">
               {visibleProjects.length > 0 ? (
                 visibleProjects.map(project => (
@@ -390,8 +392,10 @@ const InstallerDashboard = () => {
 
 
           {/* Project Status Section */}
-          <div className="dashboard-section project-status-section">
+          <div className="installer-dashboard-section">
+            <div className="installer-dashboard-header">
             <h3>Assignment Summary</h3>
+            </div>
             <div className="chart-container">
             <Bar data={barData}  options={{
                 responsive: true,
@@ -428,23 +432,27 @@ const InstallerDashboard = () => {
           </div>
 
            {/* Display work status counts */}
-    <div className="dashboard-section projects-section">
+    <div className="installer-dashboard-section">
+      <div className="installer-dashboard-header">
     <h3>Work Summary</h3>
+    </div>
+    <div style={{display:'flex', flexDirection:'row-reverse', justifyContent:'space-between'}}>
+      <div>
       <p><strong>Installation Started:</strong> {workStatusCounts["Installation Started"] || 0}</p>
-      <p><strong>On-Going:</strong> {workStatusCounts["On-Going"] || 0}</p>
+      <p><strong>On-Going:</strong> {workStatusCounts["Ongoing"] || 0}</p>
       <p><strong>Completed:</strong> {workStatusCounts["Completed"] || 0}</p>
-
+      </div>
        {/* Pie Chart for Work Summary */}
   <div className="piChart-container">
     <Pie
       data={{
-        labels: ["Installation Started", "On-Going", "Completed"],
+        labels: ["Installation Started", "Ongoing", "Completed"],
         datasets: [
           {
             label: "Work Status",
             data: [
               workStatusCounts["Installation Started"] || 0,
-              workStatusCounts["On-Going"] || 0,
+              workStatusCounts["Ongoing"] || 0,
               workStatusCounts["Completed"] || 0,
             ],
             backgroundColor: ["#FF6384", "#36A2EB", "#4BC0C0"], // Colors for each section
@@ -461,6 +469,7 @@ const InstallerDashboard = () => {
         },
       }}
     />
+  </div>
   </div>
     </div>
         </div>

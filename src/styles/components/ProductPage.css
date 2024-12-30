@@ -165,98 +165,138 @@ button:hover {
 }
 
 /* Popup Form */
-.popup {
+/* Overlay */
+.quotation-form-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  z-index: 999; /* Ensure it appears above other content */
 }
 
-.popup-content {
+/* Popup */
+.quotation-form-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   border-radius: 10px;
   padding: 30px;
-  max-width: 800px;
+  max-width: 900px;
+  width: 100%;
+  z-index: 1000; /* Ensure it appears above the overlay */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-height: 90%; /* Prevent overflowing */
+  overflow-y: auto; /* Allow scrolling for large forms */
+}
+
+
+.quotation-form-popup-content {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 900px;
   width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.popup h2 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.tabs {
+/* Tabs */
+.quotation-form-tabs {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-.tabs button {
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
+.quotation-form-tab-button {
+  padding: 10px 15px;
+  background: #f1f1f1;
+  border: none;
+  border-radius: 20px;
   cursor: pointer;
-  border-radius: 5px;
-  font-size: 1.1rem;
   transition: background-color 0.3s ease;
 }
 
-.tabs button:hover {
+.quotation-form-tab-button:hover {
   background-color: #ff7f00;
   color: white;
 }
 
-.tabs .active-tab {
+.quotation-form-active-tab {
   background-color: #ff7f00;
   color: white;
 }
 
-.form-section {
-  margin-bottom: 20px;
+/* Form Fields */
+.quotation-form-group {
+  margin-bottom: 15px;
 }
 
-.form-section label {
+.quotation-form-group label {
   display: block;
-  font-size: 1.2rem;
   margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.quotation-form-group input,
+.quotation-form-group textarea,
+.quotation-form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+}
+
+.quotation-form-checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quotation-form-checkbox-group input {
+  width: 18px;
+  height: 18px;
+  accent-color: #ff7f00;
+}
+
+/* Buttons */
+.quotation-form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.quotation-form-close-button,
+.quotation-form-submit-button {
+  padding: 12px 25px;
+  font-size: 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quotation-form-close-button {
+  background-color: #f1f1f1;
   color: #333;
 }
 
-.form-section input,
-.form-section textarea,
-.form-section select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.1rem;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-}
-
-.form-section textarea {
-  resize: vertical;
-}
-
-.close-button,
-.submit-button {
-  padding: 15px 30px;
-  font-size: 1.2rem;
+.quotation-form-submit-button {
   background-color: #ff7f00;
   color: white;
-  border: none;
-  border-radius: 5px;
-  margin-top: 20px;
-  cursor: pointer;
 }
 
-.close-button:hover,
-.submit-button:hover {
+.quotation-form-close-button:hover {
+  background-color: #ddd;
+}
+
+.quotation-form-submit-button:hover {
   background-color: #e66a00;
 }
+

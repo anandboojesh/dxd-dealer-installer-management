@@ -206,6 +206,7 @@ const QuotationManagement = () => {
           placeholder="Search by Order Number"
           value={searchQuery}
           onChange={handleSearch}
+          className="quotation-search-input"
         />
 
         <select
@@ -230,7 +231,7 @@ const QuotationManagement = () => {
       ) : error ? (
         <p className="error">{error}</p>
       ) : (
-        <div>
+        <div className="quotation-grid">
           {currentQuotations.length > 0 ? (
             currentQuotations.map((quotation) => (
               <div key={quotation.id} className="quotation-card">

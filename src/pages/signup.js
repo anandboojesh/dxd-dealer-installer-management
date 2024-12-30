@@ -80,6 +80,7 @@ const Signup = () => {
         uid: user.uid,
         referralId: referralId, // Save the referral ID
         referrals: [], // Initialize an empty array to store referrals
+        status:"Inactive"
       });
 
       // If a valid referral code was provided, update the referring user's data and send a notification

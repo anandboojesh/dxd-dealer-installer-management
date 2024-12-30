@@ -277,6 +277,9 @@ useEffect(() => {
             <th>Features</th>
             <th>Additional Requirements</th>
             <th>Status</th>
+            <th>Installer</th>
+            <th>Installer Details</th>
+            <th>Work Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -329,6 +332,10 @@ useEffect(() => {
               <td className={`status ${order.status ? order.status.toLowerCase() : ""}`}>
                 {order.status || "Unknown"}
               </td>
+              <td>{order.Installer|| "Not assigned yet."}</td>
+              <td><p><strong>Name:</strong>{order.assignedInstallerName||'N/A'}</p>{""}
+              <p><strong>ID: </strong>{order.assignedTo||'N/A'}</p></td>
+              <td>{order.workStatus|| 'Not started yet.'}</td>
               <td>
               <div className="action-menu">
                     <button onClick={() => handleDownload(order)}>Download</button>

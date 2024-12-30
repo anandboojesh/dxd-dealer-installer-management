@@ -33,10 +33,18 @@ improve css of this /* Container styling for the entire component */
     margin: 5px 0;
     font-size: 16px;
     color: #555;
+    text-align: left;
   }
   
   .quotation-card p strong {
     color: #333;
+  }
+
+
+  .quotation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Flexible grid with min card size */
+    gap: 20px; /* Space between cards */
   }
 
 
@@ -46,10 +54,12 @@ improve css of this /* Container styling for the entire component */
     gap: 10px; /* Space between items */
     align-items: center;
     margin-bottom: 20px;
+    flex-direction: row;
+    justify-content: space-between;
   }
   
   /* Styling for the search bar */
-  .quotation-search input,
+  .quotation-search-input,
 .quotation-search select {
   padding: 10px;
   border: 1px solid #ccc;
@@ -57,13 +67,13 @@ improve css of this /* Container styling for the entire component */
   font-size: 16px;
 }
 
-.quotation-search input:focus,
+.quotation-search-input:focus,
 .quotation-search select:focus {
   border-color: #007bff; /* Blue border when focused */
   outline: none;
 }
 
-.quotation-search input {
+.quotation-search-input {
   flex: 1; /* Input takes up remaining space */
   min-width: 200px; /* Ensure a minimum width for smaller screens */
 }

@@ -126,7 +126,7 @@ const UserManagementPage = () => {
         if (confirmBlock){
         updateUserStatus(user,"Active")
         }
-    } else if (user.status === "Active"){
+    } else if (user.status === "Active" || user.status === "Inactive"){
         const confirmBlock = window.confirm("Are you sure you want to block this user?");
             if (confirmBlock) {
             updateUserStatus(user, "Blocked");
@@ -162,8 +162,8 @@ const UserManagementPage = () => {
       </div>
 
       <div className="bulk-actions">
-        <button onClick={() => handleBulkAction("Inactive")}>Bulk Deactivate</button>
-        <button onClick={() => handleBulkAction("Blocked")}>Bulk Block</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Inactive")}>Bulk Deactivate</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Blocked")}>Bulk Block</button>
       </div>
 
       <table className="user-table">
@@ -191,11 +191,11 @@ const UserManagementPage = () => {
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td>
-                <button onClick={() => handleEditUser(user)}>Edit</button>
-                <button onClick={() => handleStatusToggle(user)}>
+                <button className="user-management-button" onClick={() => handleEditUser(user)}>Edit</button>
+                <button className="user-management-button" onClick={() => handleStatusToggle(user)}>
                   {user.status === "Inactive" ? "Activate" : "Deactivate"}
                 </button>
-                <button onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? "Unblock" : "Block"}</button>
+                <button className="user-management-button" onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? "Unblock" : "Block"}</button>
               </td>
             </tr>
           ))}

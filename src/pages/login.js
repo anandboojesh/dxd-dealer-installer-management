@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth } from "../services/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getDoc, doc, setDoc, collection } from "firebase/firestore";
 import { db } from "../services/firebase";
@@ -11,10 +11,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState(""); // Renamed state to avoid conflict
+  const [message, setMessage] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
   const navigate = useNavigate();
 
-  // Email validation function
   const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
@@ -25,7 +25,6 @@ const Login = () => {
     setError("");
     setLoading(true);
 
-    // Validate email format
     if (!validateEmail(email)) {
       setError("Please enter a valid email.");
       setLoading(false);
@@ -33,22 +32,12 @@ const Login = () => {
     }
 
     try {
-      // Sign in the user
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      console.log("User signed in:", user);
-
-      // Fetch user's role from Firestore
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
-        const userRole = userDoc.data().role; // Fetch role from Firestore
-        const userStatus = userDoc.data().status;
-        console.log("User role from Firestore:", userRole);
-
-       
-
-        // Check if the selected role matches the role in Firestore
+        const userRole = userDoc.data().role;
         if (userRole !== selectedRole) {
           await auth.signOut();
           setError("The role you selected does not match your credentials.");
@@ -63,10 +52,9 @@ const Login = () => {
           role: userRole,
           action: "Login",
           timestamp: loginTimestamp,
-          ip: window.location.hostname
+          ip: window.location.hostname,
         });
 
-        // Redirect based on role
         if (userRole === "Admin") navigate("/admin-dashboard");
         else if (userRole === "Dealer") navigate("/dealer-dashboard");
         else navigate("/installer-dashboard");
@@ -74,10 +62,26 @@ const Login = () => {
         setError("No user data found. Please contact support.");
       }
     } catch (err) {
-      console.error("Login error:", err);
       setError(`Failed to log in. Error: ${err.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setError("");
+    setMessage("");
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email to reset your password.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage("Password reset email sent. Please check your inbox.");
+    } catch (err) {
+      setError(`Error: ${err.message}`);
     }
   };
 
@@ -114,10 +118,14 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
 
+        {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
 
         <p className="link" onClick={() => navigate("/signup")}>
           Don't have an account? <span>Sign up</span>
+        </p>
+        <p className="link" onClick={handleForgotPassword}>
+          Forgot your password? <span>Reset it</span>
         </p>
       </form>
     </div>

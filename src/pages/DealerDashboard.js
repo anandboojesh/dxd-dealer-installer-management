@@ -103,8 +103,13 @@ const DealerDashboard = () => {
             setDealerName(name);
             setEarnings(totalEarnings);
       
-            if (status === "Inactive" || status === "Blocked") {
-              alert(`Your account has been ${status}. Please contact support.`);
+            if (status === "Inactive") {
+              alert(`Your account haven't activated by admin yet. Please contact admin and try again later!.`);
+              await signOut(auth);
+              navigate("/login");
+              return;
+            } else if(status === "Blocked"){
+              alert(`Yoy account has been ${status} by the admin, Please contact admin`);
               await signOut(auth);
               navigate("/login");
               return;
@@ -326,7 +331,7 @@ const DealerDashboard = () => {
   }, [lineChartRef]);
 
   return (
-    <div className="dashboard-container1">
+    <div className="dealer-dashboard-container">
       <div className="dashboard-header1">
         <h1>Dealer Dashboard</h1>
       </div>
@@ -339,11 +344,10 @@ const DealerDashboard = () => {
           <h2>Welcome, {dealerName}</h2>
 
           {/* My Orders Section */}
-          <div className="dashboard-section1">
+          <div className="dealer-dashboard-section">
+            <div className="dealer-dashboard-header">
             <h3>My Orders</h3>
-            <div className="container1">
-              {/* Search and Filter */}
-              <div className="search-filter">
+            <div className="search-filter">
                 <input
                   type="text"
                   placeholder="Search orders..."
@@ -351,8 +355,11 @@ const DealerDashboard = () => {
                   onChange={handleSearch}
                 />
 
-                <button className="Manage-orders" onClick= {handleManageOrders}>Manage orders</button>
+                <button className="dealer-dashboard-button" onClick= {handleManageOrders}>Manage orders</button>
               </div>
+            </div>
+            <div className="container1">
+
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => <OrderItem key={order.id} order={order} />)
               ) : (
@@ -360,11 +367,11 @@ const DealerDashboard = () => {
               )}
             </div>
             {/* Pagination */}
-            <div className="pagination">
+            <div className="dealer-pagination">
               <button
                 onClick={handlePrevious}
                 disabled={currentPage === 1}
-                className="pagination-btn"
+                className="dealer-pagination-button"
               >
                 Previous
               </button>
@@ -374,7 +381,7 @@ const DealerDashboard = () => {
               <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
-                className="pagination-btn"
+                className="dealer-pagination-button"
               >
                 Next
               </button>
@@ -382,8 +389,10 @@ const DealerDashboard = () => {
           </div>
 
           {/* Earnings Section */}
-          <div className="dashboard-section1">
+          <div className="dealer-dashboard-section">
+            <div className="dealer-dashboard-header">
             <h3>Earnings</h3>
+            </div>
             <div className="container1">
               <p>
                 <strong>Total Earnings:</strong> ₹{totalCommission || 0}
@@ -393,16 +402,11 @@ const DealerDashboard = () => {
 
           
 
-            <div className="container1">
+            
               {/* Referrals Section */}
-                <div className="dashboard-section1">
-                  <div className="refferal-header">
+                <div className="dealer-dashboard-section">
+                  <div className="dealer-dashboard-header">
                   <strong className="ref-h3">Referrals</strong>
-                  <p>
-                    <strong>Referral ID:</strong> {referralData.referralId || "N/A"}
-                  </p>
-                  <p><strong>All</strong>({referralHistory.length})</p> 
-                  </div>
                   <div className="search-filter">
                     <input
                       type="text"
@@ -411,8 +415,15 @@ const DealerDashboard = () => {
                       onChange={handleReferralSearch}
                     />
 
-                    <button className="add-referral">Add Referral</button>
+                    <button className="dealer-dashboard-button">Add Referral</button>
                   </div>
+                  </div>
+                  <div style={{display:'flex', justifyContent:'space-between'}}>
+                  <p>
+                    <strong>Referral ID:</strong> {referralData.referralId || "N/A"}{""}
+                  </p>{""}
+                  <p><strong>  All</strong>({referralHistory.length})</p> 
+                 </div>
               
 
 
@@ -430,11 +441,13 @@ const DealerDashboard = () => {
               </ul>
             )}
             </div>
-          </div>
+         
 
           {/* Reports Section */}
-          <div className="dashboard-section1">
+          <div className="dealer-dashboard-section">
+            <div className="dealer-dashboard-header">
             <h3>Reports</h3>
+            </div>
             <div className="chart-container">
               <div>
                 <h4>Earnings Over Time</h4>

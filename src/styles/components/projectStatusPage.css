@@ -1,158 +1,191 @@
-.project-status-page {
-    padding: 20px;
-  }
-  
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    gap: 20px;
-  }
-  
-  .project-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+/* styles/components/projectStatusPage.css */
 
-  .project-card p{
-    text-align: left;
-  }
-  
-  .project-title {
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .project-details p {
-    margin: 5px 0;
-    text-align: left;
-  }
-  
-  .error-message {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .projects-grid p {
-    font-size: 14px;
-  }
-  
-  .status {
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 5px;
-  }
-  
-  .assigned-status {
-    background-color: #28a745; /* Green */
-    color: white;
-  }
-  
-  .pending-status {
-    background-color: #ff9800; /* Orange */
-    color: white;
-  }
-  
-  .rejected-status {
-    background-color: #dc3545; /* Red */
-    color: white;
-  }
-  
-  .default-status {
-    background-color: #6c757d; /* Gray */
-    color: white;
-  }
+.unique-project-status-page {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9fbfd; /* Subtle blue-gray background */
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  /* Buttons */
-  .work-status-button {
-    background-color: #28a745; /* Green for Assigned */
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .notify-admin-button {
-    background-color: #ff9800; /* Orange for Pending */
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .delete-request-button {
-    background-color: #f44336; /* Red for Rejected */
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .work-status-button:hover {
-    background-color: #218838; /* Darker Green for Assigned */
-  }
-  
-  .notify-admin-button:hover {
-    background-color: #e68900; /* Darker Orange for Pending */
-  }
-  
-  .delete-request-button:hover {
-    background-color: #c1351d; /* Darker Red for Rejected */
-  }
-  
-  .work-status-button:focus,
-  .notify-admin-button:focus,
-  .delete-request-button:focus {
-    outline: none;
-  }
-  
-  
-  /* Work status dropdown */
-  .work-status-container {
-    position: relative;
-  }
-  
-  .work-status-options {
-    position: absolute;
-    top: 35px;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    width: 100%;
-  }
-  
-  .work-status-option {
-    background-color: #ffc107;
-    padding: 10px;
-    text-align: left;
-    width: 100%;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .work-status-option:hover {
-    background-color: #28a745;
-  }
-  
-  .work-status-option:focus {
-    outline: none;
-  }
+.unique-project-status-page h1 {
+  font-size: 32px;
+  color: #004aad; /* Deep blue for the heading */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.unique-project-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.unique-project-table th,
+.unique-project-table td {
+  text-align: left;
+  padding: 15px;
+  font-size: 14px;
+}
+
+.unique-project-table th {
+  background-color: #004aad;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.unique-project-table tr:nth-child(odd) {
+  background-color: #eef3fa; /* Light blue-gray for alternate rows */
+}
+
+.unique-project-table tr:nth-child(even) {
+  background-color: #ffffff; /* White for contrast */
+}
+
+.unique-project-table tr:hover {
+  background-color: #cce0f5; /* Hover effect */
+  transition: background-color 0.3s ease;
+}
+
+.unique-project-row td {
+  border-bottom: 1px solid #dde4ec; /* Subtle row separator */
+}
+
+.unique-error-message {
+  color: #d9534f; /* Red for errors */
+  text-align: center;
+  margin: 10px 0;
+}
+
+.unique-work-status-container {
+  position: relative;
+}
+
+.unique-work-status-button {
+  background-color: #004aad; /* Primary blue */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.unique-work-status-button:hover {
+  background-color: #003380; /* Darker blue for hover effect */
+}
+
+.unique-work-status-options {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.unique-work-status-option {
+  display: block;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.unique-work-status-option:hover {
+  background-color: #eef3fa; /* Light hover effect */
+}
+
+.status-assigned {
+  color: #28a745; /* Green for assigned status */
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #f0ad4e; /* Orange for pending status */
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #d9534f; /* Red for rejected status */
+  font-weight: bold;
+}
+
+.status-default {
+  color: #6c757d; /* Gray for default status */
+  font-weight: bold;
+}
+
+.unique-work-status-select {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+}
+.unique-work-status-select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.unique-search-filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unique-search-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.unique-filter-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.unique-pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.unique-pagination-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.unique-pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.unique-pagination-container span {
+  font-size: 16px;
+}
