@@ -324,20 +324,6 @@ useEffect(() => {
 
   return (
     <div className="order-management">
-
-       {/* Language Selector */}
-       <div className="language-selector">
-        <label htmlFor="language">Language: </label>
-        <select
-          id="language"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-        </select>
-      </div>
-        
       <div className="order-management-header">
         <h1>{t.title}</h1>
         <button className="new-product-btn" onClick={handlenewproduct}>{t.buttons.newProduct}</button>
