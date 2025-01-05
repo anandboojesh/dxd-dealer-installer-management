@@ -6,6 +6,7 @@ import Lottie from 'react-lottie';
 import animationData from "./refer.json";
 
 import '../styles/components/ReferralPage.css';
+import { useLanguage } from '../context/LanguageContext';
 
 const ReferralPage = () => {
   const [referralId, setReferralId] = useState('');
@@ -16,6 +17,36 @@ const ReferralPage = () => {
   const [referralHistory, setReferralHistory] = useState([]);
   const [error, setError] = useState("");
   const qrCodeRef = useRef(null);
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      title: "Your Unique Referral Code",
+      copy: "Copy referral",
+      share: "Share referral",
+      showQRCode: "Show QR Code",
+      referralHistory: "Referral History",
+      addReferral: "Add Referral",
+      totalReferrals: "Total Referrals",
+      noUsers: "No users have joined using your referral code.",
+      scanQRCode: "Scan this QR Code",
+      loading: "Loading...",
+    },
+    fr: {
+      title: "Votre Code de Parrainage Unique",
+      copy: "Copier le code de parrainage",
+      share: "Partager le code de parrainage",
+      showQRCode: "Afficher le code QR",
+      referralHistory: "Historique de Parrainage",
+      addReferral: "Ajouter un Parrainage",
+      totalReferrals: "Nombre Total de Parrainages",
+      noUsers: "Aucun utilisateur n'a rejoint avec votre code de parrainage.",
+      scanQRCode: "Scannez ce Code QR",
+      loading: "Chargement...",
+    },
+  };
+
+  const t = translations[language]; // Helper for translations
 
   useEffect(() => {
     fetchReferralData();
@@ -123,12 +154,12 @@ const ReferralPage = () => {
   return (
     <div className="container">
       {loading ? (
-        <p>Loading...</p>
+        <p>{t.loading}</p>
       ) : (
         <>
           <Lottie options={defaultOptions} height={220} width={220} />
 
-          <h2 className="title">Your Unique Referral Code</h2>
+          <h2 className="title">{t.title}</h2>
 
           <div className="referral-container">
             <p className="referral-text">{referralId || 'Loading...'}</p>
@@ -136,25 +167,25 @@ const ReferralPage = () => {
 
           <div className="actions-container">
             <button className="action-button" onClick={copyToClipboard}>
-              Copy referral
+              {t.copy}
             </button>
-            <button className="action-button" onClick={shareQRCode}>Share referral</button>
+            <button className="action-button" onClick={shareQRCode}>{t.share}</button>
             <button
               className="action-button"
               onClick={() => setShowQRCodeModal(true)}
             >
-              Show QR Code
+              {t.showQRCode}
             </button>
           </div>
 
           
 
           <div className="referrals-history">
-            <h3>Referral History</h3>
-            <button>Add Referral</button>
-            <p><strong>Total Referrals:</strong> {referralHistory.length}</p> 
+            <h3>{t.referralHistory}</h3>
+            <button>{t.addReferral}</button>
+            <p><strong>{t.totalReferrals}:</strong> {referralHistory.length}</p> 
             {referralHistory.length === 0 ? (
-              <p>No users have joined using your referral code.</p>
+              <p>{t.noUsers}</p>
             ) : (
               <ul className="referral-history-list">
                 {referralHistory.map((user, index) => (

@@ -4,7 +4,7 @@
 }
 
 .App-header {
-  background-color: #004085; /* Updated to match the navbar theme */
+  background-color: #004085;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,10 +17,11 @@
 /* Navbar Styles */
 .navbar {
   background-color: #282c34;
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 2px solid #004085; /* Subtle border at the bottom */
 }
 
 .nav-list {
@@ -28,36 +29,49 @@
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 15px;
+  gap: 20px; /* Increased spacing for better separation */
 }
 
 .navbar-item a {
-  color: #61dafb;
+  color: #ffff;
   text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.3s;
-  font-weight: bold;
+  font-size: 1.1rem;
+  transition: color 0.3s, font-weight 0.3s;
+  font-weight: 600; /* Stronger weight for professional appearance */
 }
 
 .navbar-item a:hover {
   color: #21a0f6;
+  font-weight: 700; /* Emphasize when hovered */
 }
 
 /* Logout Button */
 .logout-button {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #dc3545, #e03e2d); /* Gradient from red to a slightly darker shade */
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
+  padding: 8px 16px; /* Smaller padding for a more compact button */
+  border-radius: 5px; /* Slightly rounded corners for a more subtle look */
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease-in-out;
+  font-size: 0.9rem; /* Smaller font size for a more compact button */
+  font-weight: 600; /* Consistent, professional font weight */
+  font-family: 'Arial', sans-serif; /* Clean and modern font */
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 .logout-button:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #c82333, #e03e2d); /* Slightly darker gradient on hover */
+  transform: scale(1.05); /* Slight scale effect for interactivity */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Slightly larger shadow on hover */
 }
+
+.logout-button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.5); /* Focus shadow for accessibility */
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -68,60 +82,99 @@
 
   .nav-list {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
   }
 
   .logout-button {
-    margin-top: 10px;
+    margin-top: 15px;
   }
-}
-
-/* Animations */
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Loading Screen Styles */
-.loading-screen {
-  font-size: 1.5rem;
-  color: #6c757d;
-  margin-top: 20%;
 }
 
 /* Active Tab Highlight */
 .navbar-item.active a {
-  font-weight: bold;
-  border-bottom: 2px solid #ffc107; /* Underline effect */
+  font-weight: 700;
+  border-bottom: 3px solid #ffc107; /* Slightly thicker underline */
 }
 
-
+/* Notification Icon Styles */
 .notification-icon {
-  font-size: 20px; /* Adjust size as needed */
+  font-size: 22px;
+  transition: color 0.3s;
 }
 
 .navbar-item {
-  position: relative; /* To position the notification badge relative to this element */
+  position: relative;
 }
 
 .notification-badge {
-  position: absolute; /* Absolute position relative to the parent .navbar-item */
-  top: -5px; /* Adjust vertically to place above the icon */
-  right: -10px; /* Adjust horizontally to align properly */
+  position: absolute;
+  top: -5px;
+  right: -8px;
   background-color: red;
   color: white;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
-  border-radius: 50%; /* Ensures the badge is circular */
-  width: 18px; /* Adjust width for better appearance */
-  height: 18px; /* Match width for a perfect circle */
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Optional shadow for depth */
-  padding: 2px; /* Adjust padding for better alignment */
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  padding: 2px;
+}
+
+/* Navbar Right Section */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Increased gap for better spacing */
+}
+
+/* Language Selector Icon */
+.language-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.language-icon {
+  font-size: 22px;
+  color: #ffff;
+  transition: color 0.3s;
+}
+
+.language-icon:hover {
+  color: #61dafb;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 160px; /* Increased width for better readability */
+}
+
+.dropdown-menu li {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0f0f0;
+  color: #282c34;
+}
+
+/* Dropdown Active Item */
+.dropdown-menu li strong {
+  color: #004085;
 }

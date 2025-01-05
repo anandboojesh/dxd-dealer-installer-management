@@ -40,6 +40,7 @@ import PorteGarageLatérale from "../assets/CoulissantAluminium.jpg"; // Porte d
 import PorteGarageBasculante from "../assets/CoulissantAluminium.jpg"; // Porte de Garage Basculante
 import Motorisation from "../assets/fenetre-pvc-standard.jpg"; // Motorisation (Gate Motors)
 import GardeCorpsAluminium from "../assets/Fenêtre Aluminium Tilt & Turn.jpg"; // Garde Corps Aluminium (Aluminium Railings)
+import { useLanguage } from "../context/LanguageContext";
 
 
 
@@ -96,6 +97,66 @@ const ProductDetailPage = () => {
   const [additionalReq, setAdditionalReq] = useState("");
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [gapiInitialized, setGapiInitialized] = useState(false);
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      productDetails: "Product Details",
+      requestQuote: "Request a Quote",
+      specifications: "Specifications",
+      dimensions: "Dimensions",
+      height: "Height",
+      width: "Width",
+      clientDetails: "Client Details",
+      clientName: "Client Name",
+      clientEmail: "Client Email",
+      clientPhone: "Client Phone",
+      city: "City",
+      postalCode: "Postal Code",
+      productDetailsHeader: "Product Details",
+      selectedProduct: "Selected Product",
+      additionalRequirements: "Additional Requirements",
+      selectedGlazing: "Selected Glazing",
+      selectedColor: "Selected Color",
+      selectGlazingOption: "Select Glazing Option:",
+      selectColor: "Select Color:",
+      none: "None",
+      back:"back",
+      uploadAdditionalDetails: "Upload Additional Details:",
+      upload: "Upload", 
+      submitQuotation: "Submit Quotation",
+      quotationform:"quotation form"
+    },
+    fr: {
+      productDetails: "Détails du produit",
+      requestQuote: "Demander un devis",
+      specifications: "Spécifications",
+      dimensions: "Dimensions",
+      height: "Hauteur",
+      width: "Largeur",
+      clientDetails: "Détails du client",
+      clientName: "Nom du client",
+      clientEmail: "Email du client",
+      clientPhone: "Téléphone du client",
+      city: "Ville",
+      postalCode: "Code postal",
+      productDetailsHeader: "Détails du produit",
+      selectedProduct: "Produit sélectionné",
+      additionalRequirements: "Exigences supplémentaires",
+      selectedGlazing: "Vitrage sélectionné",
+      selectedColor: "Couleur sélectionnée",
+      selectGlazingOption: "Sélectionner une option de vitrage:",
+      selectColor: "Sélectionner la couleur:",
+      uploadAdditionalDetails: "Téléchargez des détails supplémentaires :", 
+      upload: "Télécharger", 
+      submitQuotation: "Soumettre le devis",
+      none: "Aucun",
+      back:"dos",
+      quotationform:"formulaire de devis"
+    },
+  };
+
+  const t = translations[language]; // Helper for translations
 
   // File Upload States
   const [file, setFile] = useState(null);
@@ -305,9 +366,9 @@ const ProductDetailPage = () => {
     <div className="product-detail-page">
       <header className="header">
         <button className="back-button121" onClick={() => navigate(-1)}>
-          &larr; Back
+          &larr; {t.back}
         </button>
-        <h2>Product Details</h2>
+        <h2>{t.productDetails}</h2>
       </header>
       <div className="product-detail-container">
         <div className="product-image-container">
@@ -319,7 +380,7 @@ const ProductDetailPage = () => {
 
           {product.features?.glassType && (
   <div className="glazing-options">
-    <h3>Select Glazing Option:</h3>
+    <h3>{t.selectGlazingOption}:</h3>
     <div className="options-container">
       {glazingOptions
         .filter((option) => product.features.glassType.includes(option.name))  // Filter based on the glassType
@@ -340,7 +401,7 @@ const ProductDetailPage = () => {
 
 {product.features?.colorOptions && (
             <div className="color-selection">
-              <h3>Select Color:</h3>
+              <h3>{t.selectColor}:</h3>
               <div className="color-options">
                 {product.features.colorOptions.map((color) => (
                   <div
@@ -359,9 +420,9 @@ const ProductDetailPage = () => {
           )}
 
 <div>
-                  <h4>Dimensions:</h4>
+                  <h4>{t.dimensions}:</h4>
                   <div>
-                    <label>Height:</label>
+                    <label>{t.height}:</label>
                     <input
                       type="number"
                       value={height}
@@ -369,7 +430,7 @@ const ProductDetailPage = () => {
                     />
                   </div>
                   <div>
-                    <label>Width:</label>
+                    <label>{t.width}:</label>
                     <input
                       type="number"
                       value={width}
@@ -381,7 +442,7 @@ const ProductDetailPage = () => {
 
 {product.features && Object.keys(product.features).length > 0 && (
             <div className="product-features">
-              <h3>Specifications</h3>
+              <h3>{t.specifications}:</h3>
               <ul>
               {Object.entries(product.features).map(([featureKey, featureValue]) => {
   // Skip certain feature keys
@@ -452,7 +513,7 @@ const ProductDetailPage = () => {
             className="add-to-cart-button"
             onClick={() => setShowPopup(true)}
           >
-            Request a Quote
+            {t.requestQuote}
           </button>
         </div>
       </div>
@@ -461,13 +522,12 @@ const ProductDetailPage = () => {
       {showPopup && (
         <div className="quotation-popup">
           <div className="quotation-popup-content">
-            <h2>Quotation Form</h2>
+            <h2>{t.quotationform}</h2>
             <div className="quotation-form-section">
-              <h3>Client Details</h3>
+              <h3>{t.clientDetails}</h3>
               <label className="quotation-label">
-                Client Name:
+                {t.clientName}:
                 <input
-                  type="text"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   required
@@ -476,7 +536,7 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label className="quotation-label">
-                Client Email:
+              {t.clientEmail}:
                 <input
                 className="quotation-input"
                   type="email"
@@ -486,7 +546,7 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label className="quotation-label">
-                Client Phone:
+              {t.clientPhone}:
                 <input
                   type="tel"
                   value={clientPhone}
@@ -496,9 +556,8 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label>
-                City:
+              {t.city}:
                 <input
-                  type="text"
                   value={clientCity}
                   onChange={(e) => setClientCity(e.target.value)}
                   required
@@ -506,9 +565,9 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label>
-                Postal Code:
+              {t.postalCode}:
                 <input
-                  type="text"
+                  type="number"
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   required
@@ -517,13 +576,13 @@ const ProductDetailPage = () => {
             </div>
 
             <div className="quotation-form-section">
-              <h3>Product Details</h3>
+              <h3>{t.productDetails}</h3>
               <label>
-                Selected Product:
-                <input type="text" value={product.name} readOnly />
+              {t.selectedProduct}:
               </label>
+              <input  value={product.name} readOnly />
               <label>
-                Height (ft):
+              {t.height} (ft):
                 <input
                   type="number"
                   value={height}
@@ -532,7 +591,7 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label>
-                Width (ft):
+              {t.width} (ft):
                 <input
                   type="number"
                   value={width}
@@ -541,41 +600,42 @@ const ProductDetailPage = () => {
                 />
               </label>
               <label>
-                Additional Requirements:
-                <textarea
-                  value={additionalReq}
-                  onChange={(e) => setAdditionalReq(e.target.value)}
+              {t.selectedGlazing}:
+              <input
+                  value={
+                    glazingOptions.find((option) => option.id === selectedGlazing)?.name ||
+                    "None"
+                  }
+                  readOnly
                 />
               </label>
+              <label>
+                {t.selectColor}
+                  <input
+                    value={selectedFeatures.color || "None"}
+                    readOnly
+                  />
+                </label>
+                <label>
+                  {t.dimensions}:
+                    <input
+                      value={`${height || "N/A"} (H) x ${width || "N/A"} (W)`}
+                      readOnly
+                    />
+                  </label>
+              <label>
+              {t.additionalRequirements}:
+                
+              </label>
+              <textarea
+                  value={additionalReq}
+                  onChange={(e) => setAdditionalReq(e.target.value)}
+                  className="quotation-form-textarea"
+                  style={{width:'100%',  padding: '12px', borderRadius:'15px'}}
+                />
             </div>
-
-            <label>
-    Selected Glazing:
-    <input
-      type="text"
-      value={
-        glazingOptions.find((option) => option.id === selectedGlazing)?.name ||
-        "None"
-      }
-      readOnly
-    />
-  </label>
-  <label>
-    Selected Color:
-    <input
-      type="text"
-      value={selectedFeatures.color || "None"}
-      readOnly
-    />
-  </label>
-  <label>
-    Dimensions:
-    <input
-      type="text"
-      value={`${height || "N/A"} (H) x ${width || "N/A"} (W)`}
-      readOnly
-    />
-  </label>
+  
+ 
   {Object.entries(selectedFeatures)
     .filter(([key]) => !["color", "dimensions"].includes(key))
     .map(([key, value]) => (
@@ -586,13 +646,12 @@ const ProductDetailPage = () => {
       ))}
 
             <div className="quotation-form-section">
-              <h3>Upload Additional Details:</h3>
+              <h3>{t.uploadAdditionalDetails}</h3>
               <input
                   type="file"
                   accept=".jpg,.jpeg,.png,.pdf,.docx"
                   onChange={(e) => setFile(e.target.files[0])}
                 />
-              <button onClick={handleFileUploadToDrive}>Upload</button>
             </div>
             <div className="quotation-form-actions">
               <button
@@ -605,7 +664,7 @@ const ProductDetailPage = () => {
                 className="quotation-submit-button"
                 onClick={handleSubmitQuotation}
               >
-                Submit Quotation
+                {t.submitQuotation}
               </button>
             </div>
           </div>

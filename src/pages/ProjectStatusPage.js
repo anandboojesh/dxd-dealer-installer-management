@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db, auth } from "../services/firebase";
 import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import "../styles/components/projectStatusPage.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const ProjectStatusPage = () => {
   const [requestedProjects, setRequestedProjects] = useState([]);
@@ -11,6 +12,57 @@ const ProjectStatusPage = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 5; // Number of projects to display per page
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      pageTitle: "Project Status",
+      searchPlaceholder: "Search by project name...",
+      filterAll: "All",
+      filterInstallationStarted: "Installation Started",
+      filterOngoing: "Ongoing",
+      filterCompleted: "Completed",
+      loading: "Loading your project requests...",
+      error: "Failed to load your projects. Please try again later.",
+      noProjects: "No projects match your criteria.",
+      projectName: "Project Name",
+      orderID: "Order ID",
+      status: "Status",
+      category: "Category",
+      workStatus: "Work Status",
+      deadline: "Deadline",
+      selectStatus: "Select Status",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of",
+    },
+    fr: {
+      pageTitle: "Statut du projet",
+      searchPlaceholder: "Rechercher par nom de projet...",
+      filterAll: "Tous",
+      filterInstallationStarted: "Installation commencée",
+      filterOngoing: "En cours",
+      filterCompleted: "Terminé",
+      loading: "Chargement de vos demandes de projet...",
+      error: "Échec du chargement de vos projets. Veuillez réessayer plus tard.",
+      noProjects: "Aucun projet ne correspond à vos critères.",
+      projectName: "Nom du projet",
+      orderID: "ID de commande",
+      status: "Statut",
+      category: "Catégorie",
+      workStatus: "Statut du travail",
+      deadline: "Date limite",
+      selectStatus: "Sélectionner le statut",
+      previous: "Précédent",
+      next: "Suivant",
+      page: "Page",
+      of: "de",
+    },
+  };
+  
+  const t = translations[language];
+  
 
   useEffect(() => {
     const fetchRequestedProjects = async () => {
@@ -95,13 +147,13 @@ const ProjectStatusPage = () => {
 
   return (
     <div className="unique-project-status-page">
-      <h1>Project Status</h1>
+      <h1>{t.pageTitle}</h1>
 
       {/* Search and Filter Section */}
       <div className="unique-search-filter-container">
         <input
           type="text"
-          placeholder="Search by project name..."
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="unique-search-input"
@@ -111,30 +163,30 @@ const ProjectStatusPage = () => {
           onChange={(e) => setFilterStatus(e.target.value)}
           className="unique-filter-select"
         >
-          <option value="All">All</option>
-          <option value="Installation Started">Installation Started</option>
-          <option value="Ongoing">Ongoing</option>
-          <option value="Completed">Completed</option>
+          <option value="All">{t.filterAll}</option>
+          <option value="Installation Started">{t.filterInstallationStarted}</option>
+          <option value="Ongoing">{t.filterOngoing}</option>
+          <option value="Completed">{t.filterCompleted}</option>
         </select>
       </div>
 
       {loading ? (
-        <p>Loading your project requests...</p>
+        <p>{t.loading}</p>
       ) : error ? (
         <p className="unique-error-message">{error}</p>
       ) : currentProjects.length === 0 ? (
-        <p>No projects match your criteria.</p>
+        <p>{t.noProjects}</p>
       ) : (
         <>
           <table className="unique-project-table">
             <thead>
               <tr>
-                <th>Project Name</th>
-                <th>Order ID</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>Work Status</th>
-                <th>Deadline</th>
+                <th>{t.projectName}</th>
+                <th>{t.orderID}</th>
+                <th>{t.status}</th>
+                <th>{t.category}</th>
+                <th>{t.workStatus}</th>
+                <th>{t.deadline}</th>
               </tr>
             </thead>
             <tbody>
@@ -169,17 +221,17 @@ const ProjectStatusPage = () => {
               disabled={currentPage === 1}
               className="unique-pagination-button"
             >
-              Previous
+              {t.previous}
             </button>
             <span>
-              Page {currentPage} of {totalPages}
+            {t.page} {currentPage} {t.of} {totalPages}
             </span>
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
               className="unique-pagination-button"
             >
-              Next
+              {t.next}
             </button>
           </div>
         </>

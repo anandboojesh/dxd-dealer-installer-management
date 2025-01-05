@@ -3,6 +3,7 @@ import { collection, doc, updateDoc, addDoc, query, where, onSnapshot } from "fi
 import { db } from "../services/firebase";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import "../styles/components/UserManagementPage.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const UserManagementPage = () => {
   const [users, setUsers] = useState([]);
@@ -22,6 +23,71 @@ const UserManagementPage = () => {
     companyName: "",
     role: "Dealer", });
   const [statusFilter, setStatusFilter] = useState("All");
+  const { language } = useLanguage(); 
+
+
+  const translations = {
+    en: {
+      header: "Dealer Management",
+      addDealer: "+ Add Dealer",
+      searchPlaceholder: "Search dealers...",
+      allStatuses: "All",
+      active: "Active",
+      inactive: "Inactive",
+      blocked: "Blocked",
+      bulkDeactivate: "Bulk Deactivate",
+      bulkBlock: "Bulk Block",
+      name: "Name",
+      email: "Email",
+      role: "Role",
+      status: "Status",
+      actions: "Actions",
+      edit: "Edit",
+      activate: "Activate",
+      deactivate: "Deactivate",
+      unblock: "Unblock",
+      block: "Block",
+      editDealer: "Edit Dealer",
+      addDealerTitle: "Add Dealer",
+      saveChanges: "Save Changes",
+      close: "Close",
+      phone: "Phone",
+      address: "Address",
+      companyName: "Company Name",
+    },
+    fr: {
+      header: "Gestion des revendeurs",
+      addDealer: "+ Ajouter un revendeur",
+      searchPlaceholder: "Rechercher des revendeurs...",
+      allStatuses: "Tous",
+      active: "Actif",
+      inactive: "Inactif",
+      blocked: "Bloqué",
+      bulkDeactivate: "Désactivation en masse",
+      bulkBlock: "Blocage en masse",
+      name: "Nom",
+      email: "Courriel",
+      role: "Rôle",
+      status: "Statut",
+      actions: "Actions",
+      edit: "Modifier",
+      activate: "Activer",
+      deactivate: "Désactiver",
+      unblock: "Débloquer",
+      block: "Bloquer",
+      editDealer: "Modifier le revendeur",
+      addDealerTitle: "Ajouter un revendeur",
+      saveChanges: "Enregistrer les modifications",
+      close: "Fermer",
+      phone: "Téléphone",
+      address: "Adresse",
+      companyName: "Nom de l'entreprise",
+    },
+  };
+
+
+  const t = translations[language];
+  
 
   useEffect(() => {
     // Using onSnapshot to listen to real-time changes
@@ -137,44 +203,44 @@ const UserManagementPage = () => {
   return (
     <div className="user-management-page">
       <header className="header">
-        <h1>Dealer Management</h1>
+        <h1>{t.header}</h1>
         <button
           className="add-user-button"
           onClick={() => setIsAddUserModalOpen(true)}
         >
-          + Add Dealer
+          {t.addDealer}
         </button>
       </header>
 
       <div className="filters">
         <input
           type="text"
-          placeholder="Search dealers..."
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-          <option value="All">All</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Blocked">Blocked</option>
+          <option value="All">{t.allStatuses}</option>
+          <option value="Active">{t.active}</option>
+          <option value="Inactive">{t.inactive}</option>
+          <option value="Blocked">{t.blocked}</option>
         </select>
       </div>
 
       <div className="bulk-actions">
-        <button className="user-management-button" onClick={() => handleBulkAction("Inactive")}>Bulk Deactivate</button>
-        <button className="user-management-button" onClick={() => handleBulkAction("Blocked")}>Bulk Block</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Inactive")}>{t.bulkDeactivate}</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Blocked")}>{t.bulkBlock}</button>
       </div>
 
       <table className="user-table">
         <thead>
           <tr>
-            <th>Select</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>{t.select}</th>
+            <th>{t.name}</th>
+            <th>{t.email}</th>
+            <th>{t.role}</th>
+            <th>{t.status}</th>
+            <th>{t.actions}</th>
           </tr>
         </thead>
         <tbody>
@@ -191,11 +257,11 @@ const UserManagementPage = () => {
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td>
-                <button className="user-management-button" onClick={() => handleEditUser(user)}>Edit</button>
+                <button className="user-management-button" onClick={() => handleEditUser(user)}>{t.edit}</button>
                 <button className="user-management-button" onClick={() => handleStatusToggle(user)}>
-                  {user.status === "Inactive" ? "Activate" : "Deactivate"}
+                  {user.status === "Inactive" ? t.activate : t.deactivate}
                 </button>
-                <button className="user-management-button" onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? "Unblock" : "Block"}</button>
+                <button className="user-management-button" onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? t.unblock : t.block}</button>
               </td>
             </tr>
           ))}
@@ -205,8 +271,8 @@ const UserManagementPage = () => {
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
-          <h2>Edit Dealer</h2>
-          <label>Name:</label>
+          <h2>{t.editDealer}</h2>
+          <label>{t.name}:</label>
           <input
             type="text"
             value={updatedDetails.name || ""}
@@ -214,7 +280,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, name: e.target.value }))
             }
           />
-          <label>Email:</label>
+          <label>{t.email}:</label>
           <input
             type="text"
             value={updatedDetails.email || ""}
@@ -222,7 +288,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, email: e.target.value }))
             }
           />
-          <label>Phone:</label>
+          <label>{t.phone}:</label>
           <input
             type="text"
             value={updatedDetails.phone || ""}
@@ -230,7 +296,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, phone: e.target.value }))
             }
           />
-          <label>Address:</label>
+          <label>{t.address}:</label>
           <input
             type="text"
             value={updatedDetails.address || ""}
@@ -238,7 +304,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, address: e.target.value }))
             }
           />
-          <label>Company Name:</label>
+          <label>{t.companyName}:</label>
           <input
             type="text"
             value={updatedDetails.companyName || ""}
@@ -246,8 +312,8 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, companyName: e.target.value }))
             }
           />
-          <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
-          <button onClick={() => setIsModalOpen(false)} className="modal-close">Close</button>
+          <button onClick={handleSaveChanges} className="save-button">{t.saveChanges}</button>
+          <button onClick={() => setIsModalOpen(false)} className="modal-close">{t.close}</button>
           </div>
         </div>
         
@@ -256,8 +322,8 @@ const UserManagementPage = () => {
 {isAddUserModalOpen&& (
         <div className="modal">
           <div className="modal-content">
-          <h2>Add Dealer</h2>
-          <label>Name:</label>
+          <h2>{t.addDealer}</h2>
+          <label>{t.name}:</label>
           <input
             type="text"
             value={newUserDetails.name}
@@ -265,7 +331,7 @@ const UserManagementPage = () => {
               setNewUserDetails((prev) => ({ ...prev, name: e.target.value }))
             }
           />
-          <label>Email:</label>
+          <label>{t.email}:</label>
           <input
             type="text"
             value={newUserDetails.email}
@@ -273,7 +339,7 @@ const UserManagementPage = () => {
               setNewUserDetails((prev) => ({ ...prev, email: e.target.value }))
             }
           />
-          <label>Phone:</label>
+          <label>{t.phone}:</label>
           <input
             type="text"
             value={newUserDetails.phone}
@@ -281,7 +347,7 @@ const UserManagementPage = () => {
               setNewUserDetails((prev) => ({ ...prev, phone: e.target.value }))
             }
           />
-          <label>Address:</label>
+          <label>{t.address}:</label>
           <input
             type="text"
             value={newUserDetails.address}
@@ -289,7 +355,7 @@ const UserManagementPage = () => {
               setNewUserDetails((prev) => ({ ...prev, address: e.target.value }))
             }
           />
-          <label>Company Name:</label>
+          <label>{t.companyName}:</label>
           <input
             type="text"
             value={newUserDetails.companyName}
@@ -297,10 +363,10 @@ const UserManagementPage = () => {
               setNewUserDetails((prev) => ({ ...prev, companyName: e.target.value }))
             }
           />
-          <label>Role:</label>
+          <label>{t.role}:</label>
           <input type="text" value="Installer" disabled />
-          <button onClick={handleAddUser}>Add Dealer</button>
-          <button onClick={() => setIsAddUserModalOpen(false)}>Close</button>
+          <button onClick={handleAddUser}>{t.addDealer}</button>
+          <button onClick={() => setIsAddUserModalOpen(false)}>{t.close}</button>
         </div>
         </div>
       )}

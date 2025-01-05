@@ -3,6 +3,7 @@ import { auth, db } from "../services/firebase";
 import { collection, query, where, deleteDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { MdDelete, MdCheckCircle } from "react-icons/md";
 import "../styles/components/NotificationsPage.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -12,6 +13,40 @@ const NotificationsPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [notificationsPerPage] = useState(5);
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      title: "Notifications",
+      searchPlaceholder: "Search notifications...",
+      filterByType: "Filter by Type",
+      all: "All",
+      info: "Info",
+      alert: "Alert",
+      reminder: "Reminder",
+      markAsRead: "Mark as Read",
+      delete: "Delete",
+      noNotifications: "No notifications found.",
+      loading: "Loading notifications...",
+      error: "Failed to fetch notifications. Please try again later.",
+    },
+    fr: {
+      title: "Notifications",
+      searchPlaceholder: "Rechercher des notifications...",
+      filterByType: "Filtrer par Type",
+      all: "Toutes",
+      info: "Info",
+      alert: "Alerte",
+      reminder: "Rappel",
+      markAsRead: "Marquer comme lu",
+      delete: "Supprimer",
+      noNotifications: "Aucune notification trouvée.",
+      loading: "Chargement des notifications...",
+      error: "Échec du chargement des notifications. Veuillez réessayer.",
+    },
+  };
+
+  const t = translations[language]; // Helper for translations
 
   // Fetch notifications on component mount
   useEffect(() => {
@@ -38,7 +73,7 @@ const NotificationsPage = () => {
           return unsubscribe; // Clean up listener on unmount
         } catch (err) {
           console.error("Error fetching notifications:", err);
-          setError("Failed to fetch notifications. Please try again later.");
+          setError(t.error);
         }
       }
     };
@@ -102,12 +137,12 @@ const NotificationsPage = () => {
     return groups;
   }, {});
 
-  if (loading) return <p>Loading notifications...</p>;
+  if (loading) return <p>{t.loading}</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="notifications-container">
-      <h1>Notifications</h1>
+      <h1>{t.title}</h1>
 
       {/* Search and Filter */}
       <div className="filter-container">
@@ -117,18 +152,18 @@ const NotificationsPage = () => {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search notifications..."
+          placeholder={t.searchPlaceholder}
         />
-        <label htmlFor="filter">Filter by Type: </label>
+        <label htmlFor="filter">{t.filterByType}: </label>
         <select
           id="filter"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
-          <option value="all">All</option>
-          <option value="info">Info</option>
-          <option value="alert">Alert</option>
-          <option value="reminder">Reminder</option>
+          <option value="all">{t.all}</option>
+          <option value="info">{t.info}</option>
+          <option value="alert">{t.alert}</option>
+          <option value="reminder">{t.reminder}</option>
         </select>
       </div>
 
@@ -150,11 +185,11 @@ const NotificationsPage = () => {
                   <div className="notification-actions">
                     {notification.read === "false" && (
                       <button onClick={() => markAsRead(notification.id)}>
-                        <MdCheckCircle /> Mark as Read
+                        <MdCheckCircle /> {t.markAsRead}
                       </button>
                     )}
                     <button onClick={() => deleteNotification(notification.id)}>
-                      <MdDelete /> Delete
+                      <MdDelete /> {t.delete}
                     </button>
                   </div>
                 </li>
@@ -163,7 +198,7 @@ const NotificationsPage = () => {
           </div>
         ))
       ) : (
-        <p>No notifications found.</p>
+        <p>{t.noNotifications}</p>
       )}
 
       {/* Pagination */}

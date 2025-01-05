@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, addDoc, collection, query, where, getDocs, updateDoc, arrayUnion } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/components/signup.css"; // Import the CSS file
+import { useLanguage } from "../context/LanguageContext";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ const Signup = () => {
   const [referralCode, setReferralCode] = useState(""); // State for referral code
   const [referralDetails, setReferralDetails] = useState(null);
 
+  const { language } = useLanguage(); 
   const navigate = useNavigate();
 
   // Function to generate a unique referral ID
@@ -50,11 +52,11 @@ const Signup = () => {
           email: referralData.email,
         });
       } else {
-        setError("Invalid referral code. Please check and try again.");
+        setError(t.invalidReferralCode);
       }
     } catch (err) {
       console.error("Error validating referral code:", err.message);
-      setError("Failed to validate referral code. Please try again.");
+      setError(t.failedReferralValidation);
     }
   };
 
@@ -140,25 +142,67 @@ const Signup = () => {
       console.error("Signup error:", err.message);
       // Provide a more user-friendly error message
       setError(err.message.includes("email-already")
-        ? "This email is already in use. Please try logging in or use a different email."
-        : "Failed to create an account. Please try again.");
+        ? t.emailInUse
+        : t.errorSignup);
     }
   };
 
+
+  const translations = {
+    en: {
+      signup: "Sign Up",
+      name: "Name",
+      email: "Email",
+      password: "Password",
+      role: "Role",
+      referralCode: "Referral Code (Optional)",
+      referralDetails: "Referral Details:",
+      uid: "UID",
+      welcomeMessage: "Welcome to DXD Dealer-Installer Manager",
+      successMessage: "Account created successfully! Redirecting...",
+      alreadyHaveAccount: "Already have an account? Login",
+      invalidReferralCode: "Invalid referral code. Please check and try again.",
+      failedReferralValidation: "Failed to validate referral code. Please try again.",
+      errorSignup: "Failed to create an account. Please try again.",
+      emailInUse: "This email is already in use. Please try logging in or use a different email."
+    },
+    fr: {
+      signup: "S'inscrire",
+      name: "Nom",
+      email: "Email",
+      password: "Mot de passe",
+      role: "Rôle",
+      referralCode: "Code de parrainage (facultatif)",
+      referralDetails: "Détails du parrainage:",
+      uid: "UID",
+      welcomeMessage: "Bienvenue dans le gestionnaire DXD Dealer-Installer",
+      successMessage: "Compte créé avec succès ! Redirection...",
+      alreadyHaveAccount: "Vous avez déjà un compte ? Connexion",
+      invalidReferralCode: "Code de parrainage invalide. Veuillez vérifier et réessayer.",
+      failedReferralValidation: "Échec de la validation du code de parrainage. Veuillez réessayer.",
+      errorSignup: "Échec de la création du compte. Veuillez réessayer.",
+      emailInUse: "Cet e-mail est déjà utilisé. Veuillez essayer de vous connecter ou utiliser un e-mail différent."
+    }
+  };
+  
+
+  const t = translations[language]; 
+
   return (
     <div className="signup-container">
-      <h2>Sign Up</h2>
+      
       <form onSubmit={handleSignup} className="signup-form">
-        <label>Name:</label>
+      <h2>{t.signup}</h2>
+        <label>{t.name}:</label>
         <input
-          type="text"
+        
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter your name"
           required
         />
 
-        <label>Email:</label>
+        <label>{t.email}:</label>
         <input
           type="email"
           value={email}
@@ -167,7 +211,7 @@ const Signup = () => {
           required
         />
 
-        <label>Password:</label>
+        <label>{t.password}:</label>
         <input
           type="password"
           value={password}
@@ -176,47 +220,51 @@ const Signup = () => {
           required
         />
 
-        <label>Role:</label>
+        <label>{t.role}:</label>
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="Dealer">Dealer</option>
           <option value="Installer">Installer</option>
         </select>
 
-        <label>Referral Code (Optional):</label>
-        <input
-          type="text"
-          value={referralCode}
-          onChange={(e) => {
-            setReferralCode(e.target.value);
-            handleReferralCodeValidation(e.target.value);
-          }}
-          placeholder="Enter referral code (if any)"
-        />
+        {role === "Dealer" && (
+          <>
+            <label>{t.referralCode}:</label>
+            <input
+              
+              value={referralCode}
+              onChange={(e) => {
+                setReferralCode(e.target.value);
+                handleReferralCodeValidation(e.target.value);
+              }}
+              placeholder="Enter referral code (if any)"
+            />
+          </>
+        )}
 
         {referralDetails && (
           <div className="referral-details">
             <h4>Referral Details:</h4>
             <p>
-              <strong>UID:</strong> {referralDetails.uid}
+              <strong>{t.uid}:</strong> {referralDetails.uid}
             </p>
             <p>
-              <strong>Name:</strong> {referralDetails.name}
+              <strong>{t.name}:</strong> {referralDetails.name}
             </p>
             <p>
-              <strong>Email:</strong> {referralDetails.email}
+              <strong>{t.email}:</strong> {referralDetails.email}
             </p>
           </div>
         )}
 
         <button type="submit" className="signup-button">
-          Sign Up
+        {t.signup}
         </button>
 
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
 
         <p className="link" onClick={() => navigate("/login")}>
-          Already have an account? <span>Login</span>
+        {t.alreadyHaveAccount} <span>Login</span>
         </p>
       </form>
     </div>

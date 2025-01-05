@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db, auth } from "../services/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import "../styles/components/rewardsPage.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const RewardsPage = () => {
   const [rewards, setRewards] = useState([]);
@@ -9,6 +10,42 @@ const RewardsPage = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("date");
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      rewards: "Your Rewards",
+      searchPlaceholder: "Search rewards...",
+      sortByDate: "Sort by Date",
+      sortByStatus: "Sort by Status",
+      loading: "Loading rewards...",
+      error: "Failed to load rewards. Please try again.",
+      noRewards: "No rewards available at the moment.",
+      status: "Status",
+      couponCode: "Coupon Code",
+      date: "Date",
+      redeemButton: "Redeem Now",
+      redeemComingSoon: "Redeem functionality coming soon!",
+    },
+    fr: {
+      rewards: "Vos Récompenses",
+      searchPlaceholder: "Rechercher des récompenses...",
+      sortByDate: "Trier par Date",
+      sortByStatus: "Trier par Statut",
+      loading: "Chargement des récompenses...",
+      error: "Échec du chargement des récompenses. Veuillez réessayer.",
+      noRewards: "Aucune récompense disponible pour le moment.",
+      status: "Statut",
+      couponCode: "Code de Coupon",
+      date: "Date",
+      redeemButton: "Échanger Maintenant",
+      redeemComingSoon: "Fonctionnalité d'échange à venir !",
+    }
+  };
+  
+
+
+  const t = translations[language]; // Helper for translations
 
   useEffect(() => {
     fetchRewards();
@@ -62,30 +99,30 @@ const RewardsPage = () => {
 
   return (
     <div className="rewards-page">
-      <h2>Your Rewards</h2>
+      <h2>{t.rewards}</h2>
 
       {/* Search and Sort Options */}
       <div className="filters">
         <input
           type="text"
-          placeholder="Search rewards..."
+          placeholder={t.searchPlaceholder}
           value={searchTerm}
           onChange={handleSearch}
         />
 
         <select value={sortOption} onChange={handleSortChange}>
-          <option value="date">Sort by Date</option>
-          <option value="status">Sort by Status</option>
+          <option value="date">{t.sortByDate}</option>
+          <option value="status">{t.sortByStatus}</option>
         </select>
       </div>
 
       {loading ? (
-        <p>Loading rewards...</p>
+        <p>{t.loading}</p>
       ) : error ? (
         <p className="error-message">{error}</p>
       ) : filteredRewards.length === 0 ? (
         <div className="empty-state">
-          <p>No rewards available at the moment.</p>
+          <p>{t.noRewards}</p>
           <img
             src="/path/to/empty-state-illustration.png"
             alt="No Rewards"
@@ -97,7 +134,7 @@ const RewardsPage = () => {
             <div key={index} className="reward-item">
               <h4>{reward.message}</h4>
               <p>
-                <strong>Status:</strong>{" "}
+                <strong>{t.status}:</strong>{" "}
                 <span
                   className={`status ${reward.status.toLowerCase()}`}
                 >
@@ -105,14 +142,14 @@ const RewardsPage = () => {
                 </span>
               </p>
               <p>
-                <strong>Coupon Code:</strong> {reward.couponNumber}
+                <strong>{t.couponCode}:</strong> {reward.couponNumber}
               </p>
               <p>
-                <strong>Date:</strong>{" "}
+                <strong>{t.date}:</strong>{" "}
                 {new Date(reward.createdAt.seconds * 1000).toLocaleDateString()}
               </p>
               <button onClick={() => alert("Redeem functionality coming soon!")}>
-                Redeem Now
+                {t.redeemButton}
               </button>
             </div>
           ))}

@@ -10,6 +10,7 @@ import { Bar, Pie, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend,ArcElement,PointElement,LineElement, // Import LineElement
 } from "chart.js";
+import { useLanguage } from "../context/LanguageContext";
 
 // Register chart elements
 ChartJS.register(
@@ -38,6 +39,105 @@ const AdminDashboard = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [UserStatuses, setUserStatuses] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      dashboardTitle: "Admin Dashboard",
+      quotationsAndOrders: "Quotations and Orders",
+      manageQuotations: "Manage Quotations",
+      quotationStatusOverview: "Quotation Status Overview",
+      estimatedPriceOverTime: "Estimated Price Over Time",
+      totalQuotations: "Total Quotations",
+      approved: "Approved",
+      pending: "Pending",
+      rejected: "Rejected",
+      totalEstimatedAmount: "Total Estimated Amount",
+      activity: "Activity",
+      searchDealers: "Search dealers...",
+      manageDealer: "Manage Dealer",
+      dealerName: "Dealer Name",
+      referralId: "Referral ID",
+      accountStatus: "Account Status",
+      installerName: "Installer's Name",
+      searchInstallers: "Search installers...",
+      manageInstaller: "Manage Installer",
+      activityLogs: "Activity Logs",
+      viewLogs: "View Logs",
+      hideLogs: "Hide Logs",
+      downloadLogs: "Download Logs",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of",
+      activityGraph: "Activity Graph",
+      accountStatusGraph: "Account Status Graph",
+      dealerManagement: "Dealer Management",
+      installerManagement: "Installer Management",
+      email: "Email",
+      accountStatus: "Account Status",
+      editProfile: "Edit Profile",
+      name: "Name",
+      phoneNumber: "Phone Number",
+      address: "Address",
+      companyName: "Company Name",
+      saveChanges: "Save Changes",
+      activityLogs: "Activity Logs",
+      action: "Action",
+      role: "Role",
+      timestamp: "Timestamp",
+      downloadLog: "Download Log",
+    },
+    fr: {
+      dashboardTitle: "Tableau de bord administrateur",
+      quotationsAndOrders: "Devis et commandes",
+      manageQuotations: "Gérer les devis",
+      quotationStatusOverview: "Vue d'ensemble des statuts des devis",
+      estimatedPriceOverTime: "Prix estimé au fil du temps",
+      totalQuotations: "Nombre total de devis",
+      approved: "Approuvé",
+      pending: "En attente",
+      rejected: "Rejeté",
+      totalEstimatedAmount: "Montant total estimé",
+      activity: "Activité",
+      searchDealers: "Rechercher des revendeurs...",
+      manageDealer: "Gérer le revendeur",
+      dealerName: "Nom du revendeur",
+      referralId: "ID de parrainage",
+      accountStatus: "Statut du compte",
+      installerName: "Nom de l'installateur",
+      searchInstallers: "Rechercher des installateurs...",
+      manageInstaller: "Gérer l'installateur",
+      activityLogs: "Journaux d'activité",
+      viewLogs: "Voir les journaux",
+      hideLogs: "Masquer les journaux",
+      downloadLogs: "Télécharger les journaux",
+      previous: "Précédent",
+      next: "Suivant",
+      page: "Page",
+      of: "de",
+      activityGraph: "Graphique d'activité",
+      accountStatusGraph: "Graphique de l'état du compte",
+      dealerManagement: "Gestion des revendeurs",
+      installerManagement: "Gestion des installateurs",
+      email: "Courriel",
+      accountStatus: "Statut du compte",
+      editProfile: "Modifier le profil",
+      name: "Nom",
+      phoneNumber: "Numéro de téléphone",
+      address: "Adresse",
+      companyName: "Nom de l'entreprise",
+      saveChanges: "Enregistrer les modifications",
+      activityLogs: "Journaux d'activité",
+      action: "Action",
+      role: "Rôle",
+      timestamp: "Horodatage",
+      downloadLog: "Télécharger le journal",
+    },
+  };
+  
+
+  const t = translations[language];
 
   const downloadLogsAsPDF = () => {
     const doc = new jsPDF();
@@ -392,7 +492,7 @@ const handleLogsPageChange = (newPage) => {
 
   const prepareQuotationPieChartData = () => {
     return {
-      labels: ['Approved', 'Pending', 'Rejected'],
+      labels: [t.approved, t.pending, t.rejected],
       datasets: [
         {
           data: [approvedQuotations, pendingQuotations, rejectedQuotations,],
@@ -494,8 +594,7 @@ const handleLogsPageChange = (newPage) => {
 
   return (
     <div className="dashboard-container">
-   
-        <h1>Admin Dashboard</h1>
+        <h1>{t.dashboardTitle}</h1>
     
 
       {loading ? (
@@ -507,12 +606,12 @@ const handleLogsPageChange = (newPage) => {
             {/* Quotation and Order Management */}
         <div className="dashboard-section">
         <div className="admin-dashboard-header">
-          <h3>Quotations and Orders</h3>
-          <button onClick={HandleManageQuotations} className="admin-dashboard-button">Manage Quotations</button>
+          <h3>{t.quotationsAndOrders}</h3>
+          <button onClick={HandleManageQuotations} className="admin-dashboard-button">{t.manageQuotations}</button>
           </div>
           <div className="dashboard-section01" >
           <div className="piChart-container">
-            <h4>Quotation Status Overview</h4>
+            <h4>{t.quotationStatusOverview}</h4>
           <Pie
           data={prepareQuotationPieChartData()}
           options={{
@@ -536,7 +635,7 @@ const handleLogsPageChange = (newPage) => {
         </div>
 
         <div className="chart-container">
-        <h4>Estimated Price Over Time</h4>
+        <h4>{t.estimatedPriceOverTime}</h4>
         <Line
           data={prepareEstimatedPriceData()}
           options={{
@@ -584,11 +683,10 @@ const handleLogsPageChange = (newPage) => {
       </div>
           </div>
           <div>
-          <p><strong>Total Quotations:</strong> {totalQuotations}</p>
-          <p><strong>Approved:</strong> {approvedQuotations}</p>
-          <p><strong>Pending:</strong> {pendingQuotations}</p>
-          <p><strong>Rejected:</strong> {rejectedQuotations}</p>
-          <p><strong>Total Estimated Amount:</strong> ₹{totalEstimatedAmount.toFixed(2)}</p>
+          <p><strong>{t.totalQuotations}:</strong> {totalQuotations}</p>
+          <p><strong>{t.approved}:</strong> {approvedQuotations}</p>
+          <p><strong>{t.pending}:</strong> {pendingQuotations}</p>
+          <p><strong>{t.totalEstimatedAmount}:</strong> ₹{totalEstimatedAmount.toFixed(2)}</p>
           </div>
         </div>
 
@@ -596,7 +694,7 @@ const handleLogsPageChange = (newPage) => {
            {/* Activity Logs Section - Moved below Quotations */}
         <div className="dashboard-section">
           <div className="admin-dashboard-header">
-          <h3>Activity</h3>
+          <h3>{t.activity}</h3>
 
           {/* Search Input */}
           <input
@@ -619,7 +717,7 @@ const handleLogsPageChange = (newPage) => {
           <div className="graph-container-activity">
           {/* Graph Display */}
           <div className="chart-container">
-            <h4>Activity Graph</h4>
+            <h4>{t.activityGraph}</h4>
           <Bar
               data={chartData}
               options={{
@@ -661,7 +759,7 @@ const handleLogsPageChange = (newPage) => {
         }}
       />
 
-      <h4>Account Status Graph</h4>
+      <h4>{t.accountStatusGraph}</h4>
       </div>
       </div>
           
@@ -669,7 +767,7 @@ const handleLogsPageChange = (newPage) => {
           {/* View Logs Link */}
           <div className="view-logs-link">
               <button onClick={handleShowLogs}>
-                {showLogs ? "Hide Logs" : "View Logs"}
+                {showLogs ? t.hideLogs : t.viewLogs}
               </button>
             </div>
 
@@ -679,7 +777,7 @@ const handleLogsPageChange = (newPage) => {
   <div className="Activity-log-modal-overlay">
     <div className="Activity-log-modal-content">
       <div className="Activity-log-header">
-      <h2>Activity Logs</h2>
+      <h2>{t.activityLogs}</h2>
 
       
       {/* Close Button */}
@@ -691,12 +789,12 @@ const handleLogsPageChange = (newPage) => {
         
         <thead>
           <tr>
-            <th>Action</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Timestamp</th>
+            <th>{t.action}</th>
+            <th>{t.email}</th>
+            <th>{t.role}</th>
+            <th>{t.timestamp}</th>
             <th><button className="Activity-log-download-button" onClick={downloadLogsAsPDF}>
-          Download Logs
+          {t.downloadLogs}
         </button></th>
           </tr>
         </thead>
@@ -719,7 +817,7 @@ const handleLogsPageChange = (newPage) => {
     disabled={currentPage === 1}
     className="Activity-logs-pagination-button"
   >
-    Previous
+    {t.previous}
   </button>
 
   {Array.from(
@@ -740,7 +838,7 @@ const handleLogsPageChange = (newPage) => {
     disabled={currentPage === Math.ceil(filteredActivityLogs.length / logsPerPage)}
     className="Activity-logs-pagination-button"
   >
-    Next
+    {t.next}
   </button>
 
   
@@ -750,7 +848,7 @@ const handleLogsPageChange = (newPage) => {
 ) : showLogs ? (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h3>Activity Logs</h3>
+      <h3>{t.activityLogs}</h3>
       <button className="close-button" onClick={handleShowLogs}>
         ×
       </button>
@@ -766,24 +864,24 @@ const handleLogsPageChange = (newPage) => {
           {/* Dealer Management */}
           <div className="dashboard-section">
             <div className="admin-dashboard-header">
-            <h3>Dealer Management</h3>
+            <h3>{t.dealerManagement}</h3>
             <input
               type="text"
-              placeholder="Search dealers..."
+              placeholder={t.searchDealers}
               value={dealerSearch}
               onChange={(e) => {
                 console.log(e.target.value); // Log search input
                 setDealerSearch(e.target.value);
               }}
             />
-            <button onClick={handleManageDealer} className="admin-dashboard-button">Manage Dealer</button>
+            <button onClick={handleManageDealer} className="admin-dashboard-button">{t.manageDealer}</button>
             </div>
             {paginatedDealers.map((dealer) => (
               <div key={dealer.id} className="user-card" onClick={() => handleProfileClick(dealer)}>
-                <p><strong>Dealer Name:</strong> {dealer.name}</p>
-                <p><strong>Email:</strong> {dealer.email}</p>
-                <p><strong>Referral ID:</strong> {dealer.referralId}</p>
-                <p><strong>Account Status:</strong>{dealer.status}</p>
+                <p><strong>{t.dealerName}:</strong> {dealer.name}</p>
+                <p><strong>{t.email}:</strong> {dealer.email}</p>
+                <p><strong>{t.referralId}:</strong> {dealer.referralId}</p>
+                <p><strong>{t.accountStatus}:</strong>{dealer.status}</p>
               </div>
             ))}
             {/* Pagination for Dealers */}
@@ -793,7 +891,7 @@ const handleLogsPageChange = (newPage) => {
                 disabled={dealerPage === 1}
                 className="admin-pagination-button"
               >
-                Previous
+                {t.previous}
               </button>
               {Array.from(
                 { length: Math.ceil(filteredDealers.length / itemsPerPage) },
@@ -812,7 +910,7 @@ const handleLogsPageChange = (newPage) => {
                 disabled={dealerPage === Math.ceil(filteredDealers.length / itemsPerPage)}
                 className="admin-pagination-button"
               >
-                Next
+                {t.next}
               </button>
             </div>
 
@@ -821,21 +919,21 @@ const handleLogsPageChange = (newPage) => {
           {/* Installer Management */}
           <div className="dashboard-section">
             <div className="admin-dashboard-header">
-            <h3>Installer Management</h3>
+            <h3>{t.installerManagement}</h3>
             <input
               type="text"
-              placeholder="Search installers..."
+              placeholder={t.searchInstallers}
               value={installerSearch}
               onChange={(e) => setInstallerSearch(e.target.value)}
             />
-            <button onClick={handleManageInstaller} className="admin-dashboard-button">Manage Installer</button>
+            <button onClick={handleManageInstaller} className="admin-dashboard-button">{t.manageInstaller}</button>
             </div>
             {paginatedInstallers.map((installer) => (
               <div key={installer.id} className="user-card" onClick={() => handleProfileClick(installer)}>
-                <p><strong>Installer Name:</strong> {installer.name}</p>
-                <p><strong>Email:</strong> {installer.email}</p>
-                <p><strong>Referral ID:</strong> {installer.referralId}</p>
-                <p><strong>Account Status:</strong>{installer.status}</p>
+                <p><strong>{t.installerName}:</strong> {installer.name}</p>
+                <p><strong>{t.email}:</strong> {installer.email}</p>
+                <p><strong>{t.referralId}:</strong> {installer.referralId}</p>
+                <p><strong>{t.accountStatus}:</strong>{installer.status}</p>
               </div>
             ))}
             {/* Pagination for Installers */}
@@ -845,7 +943,7 @@ const handleLogsPageChange = (newPage) => {
                 disabled={installerPage === 1}
                 className="admin-pagination-button"
               >
-                Previous
+                {t.previous}
               </button>
               {Array.from(
                 { length: Math.ceil(filteredInstallers.length / itemsPerPage) },
@@ -864,7 +962,7 @@ const handleLogsPageChange = (newPage) => {
                 disabled={installerPage === Math.ceil(filteredInstallers.length / itemsPerPage)}
                 className="admin-pagination-button"
               >
-                Next
+                {t.next}
               </button>
             </div>
           </div>
@@ -873,12 +971,12 @@ const handleLogsPageChange = (newPage) => {
            {isModalOpen && selectedProfile && (
             <div className="modal-overlay">
               <div className="modal-content">
-                <h3>Edit Profile</h3>
+                <h3>{t.editProfile}</h3>
                 <button className="close-button" onClick={handleCloseModal}>
                   ×
                 </button>
                 <div>
-                  <label>Name</label>
+                  <label>{t.name}</label>
                   <input
                     type="text"
                     name="name"
@@ -887,7 +985,7 @@ const handleLogsPageChange = (newPage) => {
                   />
                 </div>
                 <div>
-                  <label>Phone Number</label>
+                  <label>{t.phoneNumber}</label>
                   <input
                     type="text"
                     name="phoneNumber"
@@ -896,7 +994,7 @@ const handleLogsPageChange = (newPage) => {
                   />
                 </div>
                 <div>
-                  <label>Address</label>
+                  <label>{t.address}</label>
                   <input
                     type="text"
                     name="address"
@@ -905,7 +1003,7 @@ const handleLogsPageChange = (newPage) => {
                   />
                 </div>
                 <div>
-                  <label>Company Name</label>
+                  <label>{t.companyName}</label>
                   <input
                     type="text"
                     name="companyName"
@@ -913,7 +1011,7 @@ const handleLogsPageChange = (newPage) => {
                     onChange={handleInputChange}
                   />
                 </div>
-                <button onClick={handleSaveChanges}>Save Changes</button>
+                <button onClick={handleSaveChanges}>{t.saveChanges}</button>
               </div>
             </div>
           )}

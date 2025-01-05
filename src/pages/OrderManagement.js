@@ -3,6 +3,7 @@ import { collection, query, where, getDocs, doc,updateDoc } from "firebase/fires
 import { db, auth } from "../services/firebase";
 import "../styles/components/OrdersManagement.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -26,6 +27,91 @@ const [clientDetails, setClientDetails] = useState({
   postalCode: '',
   additionalRequirements: '',
 });
+
+const { language } = useLanguage(); // Language state
+
+  // Translation for English and French
+  const translations = {
+    en: {
+      title: "Order Management",
+      searchPlaceholder: "Search orders...",
+      statusLabel: "Status",
+      approveButton: "Approve",
+      rejectButton: "Reject",
+      tableHeaders: {
+        orderNumber: "Order ID",
+        date: "Date",
+        items: "Items",
+        category: "Category",
+        estimatedPrice: "Est Price",
+        paymentStatus: "Paid",
+        clientDetails: "Client Details",
+        address: "Address",
+        city: "City",
+        status: "Status",
+        installer: "Installer",
+        installerDetails: "Installer Details",
+        workStatus: "Work Status",
+        action: "Action",
+      },
+      buttons: {
+        newProduct: "+ New Product",
+        sortByDate: "Sort by Date",
+        saveChanges: "Save Changes",
+        close: "Close",
+        download: "Download",
+        editOrder: "Edit Order",
+        delete: "Delete",
+      },
+      filterOptions: {
+        allStatus: "All Status",
+        approved: "Approved",
+        pending: "Pending",
+        rejected: "Rejected",
+      },
+    },
+    fr: {
+      title: "Gestion des Commandes",
+      searchPlaceholder: "Rechercher des commandes...",
+      statusLabel: "Statut",
+      approveButton: "Approuver",
+      rejectButton: "Rejeter",
+      tableHeaders: {
+        orderNumber: "Numéro de commande",
+        date: "Date",
+        items: "Articles",
+        category: "Catégorie",
+        estimatedPrice: "Prix estimé",
+        paymentStatus: "Payé",
+        clientDetails: "Détails du client",
+        address: "Adresse",
+        city: "Ville",
+        status: "Statut",
+        installer: "Installateur",
+        installerDetails: "Détails de l'installateur",
+        workStatus: "Statut du travail",
+        action: "Action",
+      },
+      buttons: {
+        newProduct: "+ Nouveau Produit",
+        sortByDate: "Trier par Date",
+        saveChanges: "Sauvegarder les Modifications",
+        close: "Fermer",
+        download: "Télécharger",
+        editOrder: "Modifier la Commande",
+        delete: "Supprimer",
+      },
+      filterOptions: {
+        allStatus: "Tous les Statuts",
+        approved: "Approuvé",
+        pending: "En Attente",
+        rejected: "Rejeté",
+      },
+    },
+  };
+
+  const t = translations[language]; // Helper for translations
+
 
 const navigate = useNavigate();
 
@@ -238,49 +324,60 @@ useEffect(() => {
 
   return (
     <div className="order-management">
+
+       {/* Language Selector */}
+       <div className="language-selector">
+        <label htmlFor="language">Language: </label>
+        <select
+          id="language"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </select>
+      </div>
         
       <div className="order-management-header">
-        <h1>Order Management</h1>
-        <button className="new-product-btn" onClick={handlenewproduct}>+ New Product</button>
+        <h1>{t.title}</h1>
+        <button className="new-product-btn" onClick={handlenewproduct}>{t.buttons.newProduct}</button>
       </div>
       <div className="search-filter">
         <input
           type="text"
-          placeholder="Search anything"
+          placeholder={t.searchPlaceholder}
           className="search-input"
           value={searchTerm}
           onChange={handleSearch}
         />
         <div className="filter-sort">
           <select onChange={(e) => handleFilter(e.target.value)} value={filterStatus}>
-            <option value="All">All Status</option>
-            <option value="Approved">Approved</option>
-            <option value="Pending">Pending</option>
-            <option value="Rejected">Rejected</option>
+          <option value="All">{t.filterOptions.allStatus}</option>
+          <option value="Approved">{t.filterOptions.approved}</option>
+          <option value="Pending">{t.filterOptions.pending}</option>
+          <option value="Rejected">{t.filterOptions.rejected}</option>
           </select>
-          <button onClick={() => handleSort("timestamp")}>Sort by Date</button>
+          <button onClick={() => handleSort("timestamp")}>{t.buttons.sortByDate}</button>
         </div>
       </div>
       <table className="orders-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Items</th>
-            <th>Category</th>
-            <th>Est Price</th>
-            <th>Paid</th>
-            <th>Client Details</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Features</th>
-            <th>Additional Requirements</th>
-            <th>Status</th>
-            <th>Installer</th>
-            <th>Installer Details</th>
-            <th>Work Status</th>
-            <th>Action</th>
+          <th>#</th>
+      <th>{t.tableHeaders.orderNumber}</th>
+      <th>{t.tableHeaders.date}</th>
+      <th>{t.tableHeaders.items}</th>
+      <th>{t.tableHeaders.category}</th>
+      <th>{t.tableHeaders.estimatedPrice}</th>
+      <th>{t.tableHeaders.paymentStatus}</th>
+      <th>{t.tableHeaders.clientDetails}</th>
+      <th>{t.tableHeaders.address}</th>
+      <th>{t.tableHeaders.city}</th>
+      <th>{t.tableHeaders.status}</th>
+      <th>{t.tableHeaders.installer}</th>
+      <th>{t.tableHeaders.installerDetails}</th>
+      <th>{t.tableHeaders.workStatus}</th>
+      <th>{t.tableHeaders.action}</th>
           </tr>
         </thead>
         <tbody>
@@ -310,25 +407,6 @@ useEffect(() => {
                   ? `${order.city}${order.postalCode ? `, ${order.postalCode}` : ""}`
                   : "Address Not Available"}
               </td>
-              <td>
-                {order.product.features
-                  ? Object.entries(order.product.features).map(([key, value], idx) => (
-                      <div key={idx}>
-                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
-                        {Array.isArray(value) ? (
-                          <ul>
-                            {value.map((item, i) => (
-                              <li key={i}>{item}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          value
-                        )}
-                      </div>
-                    ))
-                  : "No features listed"}
-              </td>
-              <td>{order.product?.additionalRequirements || "None"}</td>
               <td className={`status ${order.status ? order.status.toLowerCase() : ""}`}>
                 {order.status || "Unknown"}
               </td>
@@ -338,9 +416,9 @@ useEffect(() => {
               <td>{order.workStatus|| 'Not started yet.'}</td>
               <td>
               <div className="action-menu">
-                    <button onClick={() => handleDownload(order)}>Download</button>
-                    <button onClick={() => handleEditOrder(order)}>Edit Order</button>
-                    <button>Delete</button>
+                    <button onClick={() => handleDownload(order)}>{t.buttons.download}</button>
+                    <button onClick={() => handleEditOrder(order)}>{t.buttons.editOrder}</button>
+                    <button>{t.buttons.delete}</button>
                 </div>
               </td>
             </tr>
@@ -424,7 +502,7 @@ useEffect(() => {
         </div>
         <div className="modal-actions">
           <button type="button" onClick={handleSaveChanges}>Save Changes</button>
-          <button type="button" onClick={handleCloseModal}>Close</button>
+          <button type="button" onClick={handleCloseModal}>{t.buttons.close}</button>
         </div>
       </form>
     </div>

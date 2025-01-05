@@ -11,6 +11,7 @@ import {
   Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend,ArcElement,PointElement,LineElement, // Import LineElement
 } from "chart.js";
 import firebase from "firebase/compat/app";
+import { useLanguage } from "../context/LanguageContext";
 
 // Register chart elements
 ChartJS.register(
@@ -34,6 +35,57 @@ const InstallerDashboard = () => {
   const [completionNotes, setCompletionNotes] = useState("");
   const [uploadedPhotos, setUploadedPhotos] = useState([]);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      welcome: "Welcome",
+      noProjects: "No projects assigned.",
+      project: "Project:",
+      clientDetails: "Client Details",
+      installerDetails: "Installer Details",
+      acknowledge: "Acknowledgement:",
+      updateWorkStatus: "Update Work Status",
+      statusButton: "Work Status",
+      notifyAdmin: "Notify Admin",
+      error: "An error occurred while fetching data. Please try again later.",
+      loading: "Loading...",
+      projectStatus: "Project Status",
+      taskSummary: "Task Summary",
+      assignmentSummary: "Assignment Summary",
+      workSummary: "Work Summary",
+      viewAll: "View All Projects",
+      completed: "Completed",
+      installationStarted: "Installation Started",
+      ongoing: "Ongoing",
+      totalProjects: "Total Projects",
+    },
+    fr: {
+      welcome: "Bienvenue",
+      noProjects: "Aucun projet attribué.",
+      project: "Projet:",
+      clientDetails: "Détails du client",
+      installerDetails: "Détails de l'installateur",
+      acknowledge: "Accusé de réception:",
+      updateWorkStatus: "Mettre à jour l'état du travail",
+      statusButton: "État du travail",
+      notifyAdmin: "Notifier l'administrateur",
+      error: "Une erreur s'est produite lors de la récupération des données. Veuillez réessayer plus tard.",
+      loading: "Chargement...",
+      projectStatus: "Statut du projet",
+      taskSummary: "Résumé des tâches",
+      assignmentSummary: "Résumé des attributions",
+      workSummary: "Résumé du travail",
+      viewAll: "Voir tous les projets",
+      completed: "Terminé",
+      installationStarted: "Installation commencée",
+      ongoing: "En cours",
+      totalProjects: "Total des projets",
+    }
+  };
+
+
+  const t = translations[language];
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -279,12 +331,12 @@ const InstallerDashboard = () => {
   const ProjectItem = ({ project }) => (
     <div className="project-item">
       <h5><strong>Project:</strong> {project.product?.productName}</h5>
-      <h4>Client Details</h4>
+      <h4>{t.clientDetails}</h4>
       <p><strong>Client Name:</strong> {project.clientName || "N/A"}</p>
       <p><strong>Client Phone:</strong> {project.clientPhone || "N/A"}</p>
       <p><strong>Client Email:</strong> {project.clientEmail || "N/A"}</p>
       <p><strong>Client location:</strong> {project.city || "N/A"}</p>
-      <h4>Installer Details</h4>
+      <h4>{t.installerDetails}</h4>
       <p><strong>Installer Name:</strong> {project.assignedInstallerName || "N/A"}</p>
       <p><strong>Installer ID:</strong> {project.assignedTo|| "N/A"}</p>
       <p><strong>Acknowledgement:</strong> {project.installerAcknowledgement || "Pending"}</p>
@@ -300,13 +352,13 @@ const InstallerDashboard = () => {
           {selectedProjectId === project.id && showStatusOptions && (
             <div className="status-options">
               <button onClick={() => handleStatusSelect(project.id, "Installation Started")}>
-                Installation Started
+              {t.installationStarted}
               </button>
               <button onClick={() => handleStatusSelect(project.id, "Ongoing")}>
-                On-Going
+              {t.ongoing}
               </button>
               <button onClick={() => handleStatusSelect(project.id, "Completed")}>
-                Completed
+              {t.completed}
               </button>
             </div>
           )}
@@ -334,23 +386,22 @@ const InstallerDashboard = () => {
 
   return (
     <div className="installer-dashboard-container">
-  
-        <h1>Installer Dashboard</h1>
+        <h1>{t.InstallerDashboard}</h1>
  
       {loading ? (
-        <p className="loading">Loading...</p>
+        <p className="loading">{t.loading}</p>
       ) : error ? (
         <p className="error">{error}</p>
       ) : (
         <div>
-          <h2>Welcome, {installerName}</h2>
+          <h2>{t.welcome}, {installerName}</h2>
 
           
 
           {/* Projects Section */}
           <div className="installer-dashboard-section">
             <div className="installer-dashboard-header">
-            <h3>Task Summary</h3>
+            <h3>{t.taskSummary}</h3>
             </div>
             <div className="container1">
               {visibleProjects.length > 0 ? (
@@ -362,7 +413,7 @@ const InstallerDashboard = () => {
               )}
               {!showAllProjects && (
               <button className="view-all-button" onClick={() => navigate('/status')}>
-                View All Projects
+                {t.viewAll}
               </button>
             )}
             </div>
@@ -394,7 +445,7 @@ const InstallerDashboard = () => {
           {/* Project Status Section */}
           <div className="installer-dashboard-section">
             <div className="installer-dashboard-header">
-            <h3>Assignment Summary</h3>
+            <h3>{t.assignmentSummary}</h3>
             </div>
             <div className="chart-container">
             <Bar data={barData}  options={{
@@ -420,7 +471,7 @@ const InstallerDashboard = () => {
               }} />
               </div>
             <div className="status-summary">
-            <p>Total Projects: {projects.length}</p>
+            <p>{t.totalProjects}: {projects.length}</p>
               {Object.keys(projectStatusCounts).length > 0 ? (
                 Object.entries(projectStatusCounts).map(([status, count]) => (
                   <p key={status}><strong>Assigned:</strong> {count}</p>
@@ -434,13 +485,13 @@ const InstallerDashboard = () => {
            {/* Display work status counts */}
     <div className="installer-dashboard-section">
       <div className="installer-dashboard-header">
-    <h3>Work Summary</h3>
+    <h3>{t.workSummary}</h3>
     </div>
     <div style={{display:'flex', flexDirection:'row-reverse', justifyContent:'space-between'}}>
       <div>
-      <p><strong>Installation Started:</strong> {workStatusCounts["Installation Started"] || 0}</p>
-      <p><strong>On-Going:</strong> {workStatusCounts["Ongoing"] || 0}</p>
-      <p><strong>Completed:</strong> {workStatusCounts["Completed"] || 0}</p>
+      <p><strong>{t.installationStarted}:</strong> {workStatusCounts["Installation Started"] || 0}</p>
+      <p><strong>{t.ongoing}:</strong> {workStatusCounts["Ongoing"] || 0}</p>
+      <p><strong>{t.completed}:</strong> {workStatusCounts["Completed"] || 0}</p>
       </div>
        {/* Pie Chart for Work Summary */}
   <div className="piChart-container">

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getDoc, doc, setDoc, collection } from "firebase/firestore";
 import { db } from "../services/firebase";
 import "../styles/components/login.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +15,61 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const navigate = useNavigate();
+  const { language } = useLanguage();
+
+  const translations = {
+    en: {
+      loginTitle: "Login",
+      roleLabel: "Role:",
+      emailLabel: "Email:",
+      passwordLabel: "Password:",
+      loginButton: "Login",
+      loggingIn: "Logging in...",
+      signupLink: "Don't have an account? Sign up",
+      forgotPasswordLink: "Forgot your password?",
+      selectRolePlaceholder: "Select your role",
+      admin: "Admin",
+      dealer: "Dealer",
+      installer: "Installer",
+      validEmailError: "Please enter a valid email.",
+      roleMismatchError: "The role you selected does not match your credentials.",
+      noUserDataError: "No user data found. Please contact support.",
+      loginFailedError: "Failed to log in. Error: ",
+      passwordResetMessage: "Password reset email sent. Please check your inbox.",
+      resetError: "Please enter a valid email to reset your password.",
+    },
+    fr: {
+      loginTitle: "Connexion",
+      roleLabel: "Rôle :",
+      emailLabel: "E-mail :",
+      passwordLabel: "Mot de passe :",
+      loginButton: "Se connecter",
+      loggingIn: "Connexion...",
+      signupLink: "Vous n'avez pas de compte ? Inscrivez-vous",
+      forgotPasswordLink: "Mot de passe oublié ?",
+      selectRolePlaceholder: "Sélectionnez votre rôle",
+      admin: "Admin",
+      dealer: "Revendeur",
+      installer: "Installateur",
+      validEmailError: "Veuillez entrer une adresse e-mail valide.",
+      roleMismatchError: "Le rôle que vous avez sélectionné ne correspond pas à vos informations d'identification.",
+      noUserDataError: "Aucune donnée utilisateur trouvée. Veuillez contacter le support.",
+      loginFailedError: "Échec de la connexion. Erreur : ",
+      passwordResetMessage: "E-mail de réinitialisation du mot de passe envoyé. Veuillez vérifier votre boîte de réception.",
+      resetError: "Veuillez entrer une adresse e-mail valide pour réinitialiser votre mot de passe.",
+    },
+  };
+
+  const t = translations[language]; // Current language translations
 
   const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
   };
+
+  const ForgotPassword = () => {
+    navigate('/forgot-password')
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,7 +77,7 @@ const Login = () => {
     setLoading(true);
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email.");
+      setError(t.validEmailError);
       setLoading(false);
       return;
     }
@@ -40,7 +91,7 @@ const Login = () => {
         const userRole = userDoc.data().role;
         if (userRole !== selectedRole) {
           await auth.signOut();
-          setError("The role you selected does not match your credentials.");
+          setError(t.roleMismatchError);
           setLoading(false);
           return;
         }
@@ -59,10 +110,10 @@ const Login = () => {
         else if (userRole === "Dealer") navigate("/dealer-dashboard");
         else navigate("/installer-dashboard");
       } else {
-        setError("No user data found. Please contact support.");
+        setError(t.noUserDataError);
       }
     } catch (err) {
-      setError(`Failed to log in. Error: ${err.message}`);
+      setError(`${t.loginFailedError}${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -73,60 +124,63 @@ const Login = () => {
     setMessage("");
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email to reset your password.");
+      setError(t.resetError);
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage("Password reset email sent. Please check your inbox.");
+      setMessage(t.passwordResetMessage);
     } catch (err) {
-      setError(`Error: ${err.message}`);
+      setError(`${t.loginFailedError}${err.message}`);
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      
       <form onSubmit={handleLogin} className="login-form">
-        <label>Role:</label>
+        <h2>{t.loginTitle}</h2>
+        <label>{t.roleLabel}</label>
         <select value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} required>
-          <option value="">Select your role</option>
-          <option value="Admin">Admin</option>
-          <option value="Dealer">Dealer</option>
-          <option value="Installer">Installer</option>
+          <option value="">{t.selectRolePlaceholder}</option>
+          <option value="Admin">{t.admin}</option>
+          <option value="Dealer">{t.dealer}</option>
+          <option value="Installer">{t.installer}</option>
         </select>
 
-        <label>Email:</label>
+        <label>{t.emailLabel}</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder={t.emailLabel}
           required
         />
-        <label>Password:</label>
+        <label>{t.passwordLabel}</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
+          placeholder={t.passwordLabel}
           required
         />
 
         <button type="submit" className="login-button" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+          {loading ? t.loggingIn : t.loginButton}
         </button>
 
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
 
+        <div style={{display:"flex", flexDirection:'row', alignItems:"center", justifyContent:"space-between"}}>
         <p className="link" onClick={() => navigate("/signup")}>
-          Don't have an account? <span>Sign up</span>
+          {t.signupLink}
         </p>
-        <p className="link" onClick={handleForgotPassword}>
-          Forgot your password? <span>Reset it</span>
+        <p className="link" onClick={ForgotPassword}>
+          {t.forgotPasswordLink}
         </p>
+        </div>
       </form>
     </div>
   );

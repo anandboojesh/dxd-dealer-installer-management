@@ -40,6 +40,33 @@
   align-items: center;
 }
 
+.view-order-details-btn {
+  background-color: #007bff; /* Primary blue */
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Padding for size */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Bold text */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+.view-order-details-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+.view-order-details-btn:active {
+  background-color: #003f7f; /* Even darker blue on click */
+  transform: scale(0.98); /* Slight scaling effect */
+}
+
+.view-order-details-btn:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+}
+
 
 .dealer-dashboard-header h1 {
   font-size: 2.5rem;
@@ -49,6 +76,10 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: 1px;
   transition: color 0.3s ease;
+}
+
+.dealer-dashboard-header h2 {
+  color: #ffff;
 }
 
 .dealer-dashboard-header:hover {
@@ -154,6 +185,43 @@
 .earning-item strong,
 .referral-item strong {
   color: #333;
+}
+
+.order-item button{
+  background: linear-gradient(90deg, #0078ff, #0056cc); /* Gradient background */
+  color: #ffffff; /* White text */
+  padding: 8px 16px; /* Reduced padding for smaller size */
+  font-size: 14px; /* Smaller font size */
+  font-weight: 600; /* Semi-bold text */
+  border: none; /* No border */
+  border-radius: 20px; /* Rounded pill-shaped corners */
+  cursor: pointer; /* Pointer cursor */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.order-item button:hover{
+  background: linear-gradient(90deg, #0056cc, #0041a3); /* Darker gradient on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+  transform: translateY(-1px); /* Slight lift effect */
+}
+
+.order-item button:active{
+  background: linear-gradient(90deg, #003d80, #002c5b); /* Even darker gradient on click */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Reduced shadow for pressed state */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+.order-item button:focus{
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.4); /* Custom focus ring */
+}
+
+.order-item button:disabled{
+  background: #d3d3d3; /* Grey background for disabled state */
+  color: #a0a0a0; /* Muted text color */
+  cursor: not-allowed; /* Show disabled cursor */
+  box-shadow: none; /* Remove shadow for disabled */
 }
 
 .chart-container {

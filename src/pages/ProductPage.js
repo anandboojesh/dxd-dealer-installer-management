@@ -40,6 +40,7 @@ import PorteGarageLatérale from "../assets/CoulissantAluminium.jpg"; // Porte d
 import PorteGarageBasculante from "../assets/CoulissantAluminium.jpg"; // Porte de Garage Basculante
 import Motorisation from "../assets/fenetre-pvc-standard.jpg"; // Motorisation (Gate Motors)
 import GardeCorpsAluminium from "../assets/Fenêtre Aluminium Tilt & Turn.jpg"; // Garde Corps Aluminium (Aluminium Railings)
+import { useLanguage } from "../context/LanguageContext";
 
 
   const productImages = {
@@ -97,7 +98,36 @@ const ProductPage = () => {
   const [height, setHeight] = useState('');
   const [additionalReq, setAdditionalReq] = useState('');
   const [productscount, setProductscount] = useState([]);
-  const itemsPerPage = 8; // Number of products per page
+  const itemsPerPage = 6; // Number of products per page
+
+  const { language } = useLanguage(); 
+
+  const translations = {
+    en: {
+      catalog: "Product Catalog",
+      search: "Search products...",
+      addToQuotation: "Add to Quotation",
+      allCategories: "All Categories",
+      quotationSummary: "Quotation Summary",
+      noProducts: "No products in quotation.",
+      proceed: "Proceed",
+      previous: "Previous",
+      next: "Next",
+    },
+    fr: {
+      catalog: "Catalogue de Produits",
+      search: "Rechercher des produits...",
+      addToQuotation: "Ajouter au Devis",
+      allCategories: "Toutes les Catégories",
+      quotationSummary: "Résumé de Devis",
+      noProducts: "Aucun produit dans le devis.",
+      proceed: "Procéder",
+      previous: "Précédent",
+      next: "Suivant",
+    },
+  };
+
+  const t = translations[language]
  
   const navigate = useNavigate()
 
@@ -240,17 +270,17 @@ const ProductPage = () => {
   };
   return (
     <div className="product-page">
-      <h1>Product Catalog</h1>
+      <h1>{t.catalog}</h1>
 
       {/* Search and Filter Section */}
       <div className="search-filter">
         <input
           type="text"
-          placeholder="Search products..."
+          placeholder={t.search}
           onChange={handleSearch}
         />
         <select onChange={(e) => filterByCategory(e.target.value)}>
-          <option value="All">All Categories</option>
+          <option value="All">{t.allCategories}</option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
@@ -275,7 +305,7 @@ const ProductPage = () => {
         <h3>{product.name}</h3>
         <p>{product.category}</p>
       </div>
-            <button onClick={() => addToCart(product)}>Add to Quotation</button>
+            <button onClick={() => addToCart(product)}>{t.addToQuotation}</button>
           </div>
         ))}
       </div>
@@ -287,7 +317,7 @@ const ProductPage = () => {
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          Previous
+          {t.previous}
         </button>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
@@ -303,13 +333,13 @@ const ProductPage = () => {
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          Next
+          {t.next}
         </button>
       </div>
 
       {/* Cart Section */}
       <div className="cart" ref={quotationRef}>
-        <h2>Quotation Summary</h2>
+        <h2>{t.quotationSummary}</h2>
         {cart.length > 0 ? (
           <>
             <ul>
@@ -328,11 +358,11 @@ const ProductPage = () => {
               onClick={() => setShowPopup(true)}
               style={{ backgroundColor: "orange", fontWeight: "bold" }}
             >
-              Proceed
+             {t.proceed}
             </button>
           </>
         ) : (
-          <p>No products in quotation.</p>
+          <p>{t.noProducts}</p>
         )}
       </div>
 

@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { CSVLink } from "react-csv";
 import "../styles/components/projectRequestPage.css"; // Add your styles here
+import { useLanguage } from "../context/LanguageContext";
 
 const ProjectRequestPage = () => {
   const [projects, setProjects] = useState([]);
@@ -24,7 +25,90 @@ const ProjectRequestPage = () => {
   const [selectedInstruction, setSelectedInstruction] = useState(null); // For editing an instruction
   const [instructionText, setInstructionText] = useState(""); // To store the text input for instructions
   const [showInstructionModal, setShowInstructionModal] = useState(false);
+  const { language } = useLanguage(); 
 
+  const translations = {
+    en: {
+      header: "Project Requests",
+      searchPlaceholder: "Search projects by project name, dealer or client",
+      filterByStatus: "Filter by Status",
+      exportCsv: "Export to CSV",
+      assignButton: "Assign",
+      addInstruction: "Add Instruction",
+      editInstruction: "Edit Instruction",
+      addInstructionButton: "Add Instruction",
+      confirmButton: "Confirm",
+      cancelButton: "Cancel",
+      clientDetails: "Client Details",
+      dealerDetails: "Dealer Details",
+      project: "Project",
+      features: "Features",
+      actions: "Actions",
+      installerDetails: "Installer Details",
+      deadline: "Deadline",
+      instructions: "Instructions",
+      acknowledgement: "Acknowledgement",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of",
+      installerNotFound: "Installer details not found",
+      noInstallerAssigned: "No installer assigned yet",
+      noDeadlineSet: "No deadline set",
+      notAcknowledgedYet: "Not acknowledged yet",
+      installerName: "Installer name",
+      installerId: "Installer ID",
+      clientName: "Client Name",
+      clientPhone: "Client Phone",
+      clientCity: "Client City",
+      dealerName: "Dealer Name",
+      dealerId: "Dealer ID",
+      dealerMail: "Dealer Mail",
+      noDealerDetails: "No dealer details",
+      noClientDetails:"No client details"
+    },
+    fr: {
+      header: "Demandes de projet",
+      searchPlaceholder: "Recherchez des projets par nom de projet, revendeur ou client",
+      filterByStatus: "Filtrer par statut",
+      exportCsv: "Exporter en CSV",
+      assignButton: "Attribuer",
+      addInstruction: "Ajouter une instruction",
+      editInstruction: "Modifier l'instruction",
+      addInstructionButton: "Ajouter une instruction",
+      confirmButton: "Confirmer",
+      cancelButton: "Annuler",
+      clientDetails: "Détails du client",
+      dealerDetails: "Détails du revendeur",
+      project: "Projet",
+      features: "Caractéristiques",
+      actions: "Actions",
+      installerDetails: "Détails de l'installateur",
+      deadline: "Date limite",
+      instructions: "Instructions",
+      acknowledgement: "Accusé de réception",
+      previous: "Précédent",
+      next: "Suivant",
+      page: "Page",
+      of: "de",
+      installerNotFound: "Détails de l'installateur introuvables",
+      noInstallerAssigned: "Aucun installateur assigné pour l'instant",
+      noDeadlineSet: "Aucune date limite définie",
+      notAcknowledgedYet: "Pas encore reconnu",
+      installerName: "Nom de l'installateur",
+      installerId: "ID de l'installateur",
+      clientName: "Nom du client",
+    clientPhone: "Téléphone du client",
+    clientCity: "Ville du client",
+    dealerName: "Nom du distributeur",
+    dealerId: "ID du distributeur",
+    dealerMail: "Courriel du distributeur",
+    noDealerDetails: "Aucun détail sur le distributeur",
+    noClientDetails:"Aucun détail sur le client"
+    }
+  };
+
+  const t = translations[language];
 
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 10;
@@ -220,18 +304,18 @@ const ProjectRequestPage = () => {
 
   return (
     <div className="project-request-page">
-      <h1>Project Requests</h1>
+      <h1>{t.header}</h1>
 
       {/* Search Bar */}
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search projects by project name, dealer or client"
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 <div className="filter-status">
-<label>Filter by Status: </label>
+<label>{t.filterByStatus} </label>
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
@@ -244,7 +328,7 @@ const ProjectRequestPage = () => {
 
         <div className="export-button">
         <CSVLink data={Csvdata} headers={headers} filename="project_requests.csv">
-          <button>Export to CSV</button>
+          <button>{t.exportCsv}</button>
         </CSVLink>
       </div>
       </div>
@@ -253,17 +337,15 @@ const ProjectRequestPage = () => {
       <table className="project-table">
         <thead>
           <tr>
-            <th>Order ID</th>
-            <th>Client Details</th>
-            <th>Dealer Details</th>
-            <th>Project</th>
-            <th>Features</th>
-            <th>Actions</th>
-            <th>Installer Details</th>
-            <th>Deadline</th>
-            <th>Instructions</th>
-            <th>Acknowledgement</th>
-
+          <th>Order ID</th>
+          <th>{t.clientDetails}</th>
+          <th>{t.dealerDetails}</th>
+          <th>{t.project}</th>
+          <th>{t.actions}</th>
+          <th>{t.installerDetails}</th>
+          <th>{t.deadline}</th>
+          <th>{t.instructions}</th>
+          <th>{t.acknowledgement}</th>
           </tr>
         </thead>
         <tbody>
@@ -271,46 +353,27 @@ const ProjectRequestPage = () => {
             <tr key={project.id}>
               <td>{project.id}</td>
               <td>
-                <strong>Client Name: </strong>{project.clientName} <br />
-                <strong>Client Phone: </strong>{project.clientPhone} <br />
-                <strong>Client city: </strong>{project.city} <br />
+                <strong>{t.clientName}: </strong>{project.clientName} <br />
+                <strong>{t.clientPhone}: </strong>{project.clientPhone} <br />
+                <strong>{t.clientCity}: </strong>{project.city} <br />
               </td>
               <td>
                 {project.dealer ? (
                   <>
-                    <strong>Dealer name: </strong>{project.dealer.name} <br />
-                    <strong>Dealer ID: </strong>{project.dealer.uid} <br />
-                    <strong>Dealer mail: </strong>{project.dealer.email} <br />
+                    <strong>{t.dealerName}: </strong>{project.dealer.name} <br />
+                    <strong>{t.dealerMail}: </strong>{project.dealer.email} <br />
                   </>
                 ) : (
-                  "No dealer details"
+                  t.noDealerDetails
                 )}
               </td>
               <td>{project.product?.productName}</td>
-              <td>
-                {project.product?.features
-                  ? Object.entries(project.product.features).map(([key, value], index) => (
-                      <div key={index}>
-                        <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong>{" "}
-                        {Array.isArray(value) ? (
-                          <ul>
-                            {value.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          value
-                        )}
-                      </div>
-                    ))
-                  : <strong>No features listed.</strong>}
-              </td>
               <td>
                 <button
                   className="assign-btn"
                   onClick={() => handleAssign(project.id)}
                 >
-                  Assign
+                 {t.assignButton}
                 </button>
               </td>
 
@@ -318,19 +381,19 @@ const ProjectRequestPage = () => {
                 {project.Installer === "Assigned" && project.assignedTo ? (
                   installers.find((installer) => installer.id === project.assignedTo) ? (
                     <>
-                      <strong>Installer name: </strong>{installers.find((installer) => installer.id === project.assignedTo).name}, 
-                      <strong>Installer ID: </strong>{installers.find((installer) => installer.id === project.assignedTo).uid}
+                      <strong>{t.installerName}: </strong>{installers.find((installer) => installer.id === project.assignedTo).name}<br/> 
+                      <strong>{t.installerId}: </strong>{installers.find((installer) => installer.id === project.assignedTo).uid}
                     </>
                   ) : (
-                    "Installer details not found"
+                    t.installerNotFound
                   )
                 ) : (
-                  "No installer assigned yet"
+                  t.noInstallerAssigned
                 )}
               </td>
 
               <td>
-            {project.installationDeadline ? project.installationDeadline : "No deadline set"}
+            {project.installationDeadline ? project.installationDeadline : t.noDeadlineSet}
             </td>
 
             <td>
@@ -339,15 +402,15 @@ const ProjectRequestPage = () => {
                         <ul>
                             <li>{project.installerInstructions || null}</li>
                         </ul>
-                  <button onClick={() => handleEditInstruction(project.id, project.instructions)}>
+                  <button className="add-instruction-btn" onClick={() => handleEditInstruction(project.id, project.instructions)}>
                    Add Instruction
                   </button>
                   </div>
                 ) : (
-                  <button onClick={() => handleAddInstruction(project.id)}>Add Instruction</button>
+                  <button className="add-instruction-btn" onClick={() => handleAddInstruction(project.id)}>{t.addInstruction}</button>
                 )}
               </td>
-              <td>{project.installerAcknowledgement}</td>
+              <td>{project.installerAcknowledgement || t.notAcknowledgedYet}</td>
             </tr>
           ))}
         </tbody>
@@ -359,14 +422,14 @@ const ProjectRequestPage = () => {
           onClick={prevPage}
           disabled={currentPage === 1}
         >
-          Previous
+          {t.previous}
         </button>
-        <span>Page {currentPage}</span>
+        <span>{t.page} {currentPage}</span>
         <button
           onClick={nextPage}
           disabled={currentPage === Math.ceil(projects.length / projectsPerPage)}
         >
-          Next
+         {t.next}
         </button>
       </div>
 

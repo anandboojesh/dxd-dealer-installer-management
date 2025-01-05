@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { collection, doc, updateDoc, addDoc, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../services/firebase";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import "../styles/components/UserManagementPage.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const UserManagementPage = () => {
   const [users, setUsers] = useState([]);
@@ -19,8 +21,73 @@ const UserManagementPage = () => {
   const [newUserDetails, setNewUserDetails] = useState({ name: "", email: "", role: "Installer", status: "Active", phone: "",
     address: "",
     companyName: "",
-    role: "Installer", });
+    role: "Dealer", });
   const [statusFilter, setStatusFilter] = useState("All");
+  const { language } = useLanguage(); 
+
+
+  const translations = {
+    en: {
+      header: "Installer Management",
+      addInstaller: "+ Add Dealer",
+      searchPlaceholder: "Search dealers...",
+      allStatuses: "All",
+      active: "Active",
+      inactive: "Inactive",
+      blocked: "Blocked",
+      bulkDeactivate: "Bulk Deactivate",
+      bulkBlock: "Bulk Block",
+      name: "Name",
+      email: "Email",
+      role: "Role",
+      status: "Status",
+      actions: "Actions",
+      edit: "Edit",
+      activate: "Activate",
+      deactivate: "Deactivate",
+      unblock: "Unblock",
+      block: "Block",
+      editInstaller: "Edit Dealer",
+      addInstallerTitle: "Add Dealer",
+      saveChanges: "Save Changes",
+      close: "Close",
+      phone: "Phone",
+      address: "Address",
+      companyName: "Company Name",
+    },
+    fr: {
+      header: "Gestion des Installateur",
+      addInstaller: "+ Ajouter un Installateur",
+      searchPlaceholder: "Rechercher des Installateur...",
+      allStatuses: "Tous",
+      active: "Actif",
+      inactive: "Inactif",
+      blocked: "Bloqué",
+      bulkDeactivate: "Désactivation en masse",
+      bulkBlock: "Blocage en masse",
+      name: "Nom",
+      email: "Courriel",
+      role: "Rôle",
+      status: "Statut",
+      actions: "Actions",
+      edit: "Modifier",
+      activate: "Activer",
+      deactivate: "Désactiver",
+      unblock: "Débloquer",
+      block: "Bloquer",
+      editInstaller: "Modifier le Installateur",
+      addInstallerTitle: "Ajouter un Installateur",
+      saveChanges: "Enregistrer les modifications",
+      close: "Fermer",
+      phone: "Téléphone",
+      address: "Adresse",
+      companyName: "Nom de l'entreprise",
+    },
+  };
+
+
+  const t = translations[language];
+  
 
   useEffect(() => {
     // Using onSnapshot to listen to real-time changes
@@ -49,14 +116,14 @@ const UserManagementPage = () => {
     }
   };
 
-  const handleEditUser = (installer) => {
-    setSelectedUser(installer);
+  const handleEditUser = (Installer) => {
+    setSelectedUser(Installer);
     setUpdatedDetails({
-      name: installer.name,
-      email: installer.email,
-      phone: installer.phone || "", // Add phone if it exists
-      address: installer.address || "", // Add address if it exists
-      companyName: installer.companyName || "", // Add companyName if it exists
+      name: Installer.name || null,
+      email: Installer.email || null,
+      phone: Installer.phone || null, // Add phone if it exists
+      address: Installer.address || null, // Add address if it exists
+      companyName: Installer.companyName || null, // Add companyName if it exists
     });
     setIsModalOpen(true);
   };
@@ -125,7 +192,7 @@ const UserManagementPage = () => {
         if (confirmBlock){
         updateUserStatus(user,"Active")
         }
-    } else if (user.status === "Active"){
+    } else if (user.status === "Active" || user.status === "Inactive"){
         const confirmBlock = window.confirm("Are you sure you want to block this user?");
             if (confirmBlock) {
             updateUserStatus(user, "Blocked");
@@ -135,45 +202,46 @@ const UserManagementPage = () => {
 
   return (
     <div className="user-management-page">
+
       <header className="header">
-        <h1>Dealer Management</h1>
+        <h1>{t.header}</h1>
         <button
           className="add-user-button"
           onClick={() => setIsAddUserModalOpen(true)}
         >
-          + Add Installer
+          {t.addInstaller}
         </button>
       </header>
 
       <div className="filters">
         <input
           type="text"
-          placeholder="Search dealers..."
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-          <option value="All">All</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Blocked">Blocked</option>
+          <option value="All">{t.allStatuses}</option>
+          <option value="Active">{t.active}</option>
+          <option value="Inactive">{t.inactive}</option>
+          <option value="Blocked">{t.blocked}</option>
         </select>
       </div>
 
       <div className="bulk-actions">
-        <button onClick={() => handleBulkAction("Inactive")}>Bulk Deactivate</button>
-        <button onClick={() => handleBulkAction("Blocked")}>Bulk Block</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Inactive")}>{t.bulkDeactivate}</button>
+        <button className="user-management-button" onClick={() => handleBulkAction("Blocked")}>{t.bulkBlock}</button>
       </div>
 
       <table className="user-table">
         <thead>
           <tr>
-            <th>Select</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>{t.select}</th>
+            <th>{t.name}</th>
+            <th>{t.email}</th>
+            <th>{t.role}</th>
+            <th>{t.status}</th>
+            <th>{t.actions}</th>
           </tr>
         </thead>
         <tbody>
@@ -190,11 +258,11 @@ const UserManagementPage = () => {
               <td>{user.role}</td>
               <td>{user.status}</td>
               <td>
-                <button onClick={() => handleEditUser(user)}>Edit</button>
-                <button onClick={() => handleStatusToggle(user)}>
-                  {user.status === "Inactive" ? "Activate" : "Deactivate"}
+                <button className="user-management-button" onClick={() => handleEditUser(user)}>{t.edit}</button>
+                <button className="user-management-button" onClick={() => handleStatusToggle(user)}>
+                  {user.status === "Inactive" ? t.activate : t.deactivate}
                 </button>
-                <button onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? "Unblock" : "Block"}</button>
+                <button className="user-management-button" onClick={() => handleBlockToggle(user)}>{user.status === "Blocked" ? t.unblock : t.block}</button>
               </td>
             </tr>
           ))}
@@ -204,8 +272,8 @@ const UserManagementPage = () => {
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
-          <h2>Edit Installer</h2>
-          <label>Name:</label>
+          <h2>{t.editInstaller}</h2>
+          <label>{t.name}:</label>
           <input
             type="text"
             value={updatedDetails.name || ""}
@@ -213,7 +281,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, name: e.target.value }))
             }
           />
-          <label>Email:</label>
+          <label>{t.email}:</label>
           <input
             type="text"
             value={updatedDetails.email || ""}
@@ -221,7 +289,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, email: e.target.value }))
             }
           />
-          <label>Phone:</label>
+          <label>{t.phone}:</label>
           <input
             type="text"
             value={updatedDetails.phone || ""}
@@ -229,7 +297,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, phone: e.target.value }))
             }
           />
-          <label>Address:</label>
+          <label>{t.address}:</label>
           <input
             type="text"
             value={updatedDetails.address || ""}
@@ -237,7 +305,7 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, address: e.target.value }))
             }
           />
-          <label>Company Name:</label>
+          <label>{t.companyName}:</label>
           <input
             type="text"
             value={updatedDetails.companyName || ""}
@@ -245,8 +313,8 @@ const UserManagementPage = () => {
               setUpdatedDetails((prev) => ({ ...prev, companyName: e.target.value }))
             }
           />
-          <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
-          <button onClick={() => setIsModalOpen(false)} className="modal-close">Close</button>
+          <button onClick={handleSaveChanges} className="save-button">{t.saveChanges}</button>
+          <button onClick={() => setIsModalOpen(false)} className="modal-close">{t.close}</button>
           </div>
         </div>
         
@@ -255,7 +323,7 @@ const UserManagementPage = () => {
 {isAddUserModalOpen&& (
         <div className="modal">
           <div className="modal-content">
-          <h2>Add Installer</h2>
+          <h2>Add Installer </h2>
           <label>Name:</label>
           <input
             type="text"
@@ -297,7 +365,7 @@ const UserManagementPage = () => {
             }
           />
           <label>Role:</label>
-          <input type="text" value="Installer" disabled />
+          <input type="text" value="Dealer" disabled />
           <button onClick={handleAddUser}>Add Installer</button>
           <button onClick={() => setIsAddUserModalOpen(false)}>Close</button>
         </div>

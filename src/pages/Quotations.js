@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../services/firebase"; // Assuming Firebase setup is done
 import { collection, getDocs, doc, updateDoc, setDoc, addDoc } from "firebase/firestore";
 import "../styles/components/QuotationManagement.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const QuotationManagement = () => {
   const [quotations, setQuotations] = useState([]);
@@ -13,7 +14,77 @@ const QuotationManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [paymentStatusFilter, setPaymentStatusFilter] = useState(""); // State for payment status filter
-  const [statusFilter, setStatusFilter] = useState("");  
+  const [statusFilter, setStatusFilter] = useState("");
+  const { language } = useLanguage(); 
+  
+  const translations = {
+    en: {
+      header: "Quotation Management",
+      searchPlaceholder: "Search by Order Number",
+      allPaymentStatuses: "All Payment Statuses",
+      pending: "Pending",
+      completed: "Completed",
+      canceled: "Canceled",
+      allStatuses: "All Statuses",
+      approved: "Approved",
+      rejected: "Rejected",
+      noQuotations: "No quotations found.",
+      orderNumber: "Order Number",
+      clientName: "Client Name",
+      product: "Product",
+      height: "Height",
+      width: "Width",
+      postalCode: "Postal Code",
+      phone: "Phone",
+      userId: "User Id",
+      estimatedPrice: "Estimated Price",
+      commissionPercentage: "Commission Percentage",
+      commissionValue: "Commission Value",
+      paymentStatus: "Payment Status",
+      status: "Status",
+      approve: "Approve",
+      reject: "Reject",
+      notificationSent: "Notification sent!",
+      page: "Page",
+      of: "of",
+      previous: "Previous",
+      next: "Next",
+    },
+    fr: {
+      header: "Gestion des Devis",
+      searchPlaceholder: "Rechercher par numéro de commande",
+      allPaymentStatuses: "Tous les statuts de paiement",
+      pending: "En attente",
+      completed: "Terminé",
+      canceled: "Annulé",
+      allStatuses: "Tous les statuts",
+      approved: "Approuvé",
+      rejected: "Rejeté",
+      noQuotations: "Aucun devis trouvé.",
+      orderNumber: "Numéro de commande",
+      clientName: "Nom du client",
+      product: "Produit",
+      height: "Hauteur",
+      width: "Largeur",
+      postalCode: "Code postal",
+      phone: "Téléphone",
+      userId: "Identifiant utilisateur",
+      estimatedPrice: "Prix estimé",
+      commissionPercentage: "Pourcentage de commission",
+      commissionValue: "Valeur de la commission",
+      paymentStatus: "Statut du paiement",
+      status: "Statut",
+      approve: "Approuver",
+      reject: "Rejeter",
+      notificationSent: "Notification envoyée !",
+      page: "Page",
+      of: "de",
+      previous: "Précédent",
+      next: "Suivant",
+    },
+  };
+
+  const t = translations[language];
 
   const totalPages = Math.ceil(quotations.length / itemsPerPage);
 
@@ -195,15 +266,18 @@ const QuotationManagement = () => {
 
   return (
     <div className="quotation-management-container">
+
+
+
       <div className="quotation-header">
-        <h1>Quotation Management</h1>
+        <h1>{t. header}</h1>
       </div>
 
       {/* Search Input */}
       <div className="quotation-search">
         <input
           type="text"
-          placeholder="Search by Order Number"
+          placeholder={t.searchPlaceholder}
           value={searchQuery}
           onChange={handleSearch}
           className="quotation-search-input"
@@ -213,21 +287,21 @@ const QuotationManagement = () => {
           value={paymentStatusFilter}
           onChange={(e) => setPaymentStatusFilter(e.target.value)}
         >
-          <option value="">All Payment Statuses</option>
-          <option value="Pending">Pending</option>
-          <option value="Completed">Completed</option>
-          <option value="Canceled">Canceled</option>
+          <option value="">{t.allPaymentStatuses}</option>
+          <option value="Pending">{t.pending}</option>
+          <option value="Completed">{t.completed}</option>
+          <option value="Canceled">{t.canceled}</option>
         </select>
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-          <option value="">All Statuses</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Pending">Pending</option>
+          <option value="">{t.allStatuses}</option>
+          <option value="Approved">{t.approved}</option>
+          <option value="Rejected">{t.rejected}</option>
+          <option value="Pending">{t.pending}</option>
         </select>
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <p>{t.loading}</p>
       ) : error ? (
         <p className="error">{error}</p>
       ) : (
@@ -330,7 +404,7 @@ const QuotationManagement = () => {
 
                     {(quotation.status === "Approved" || quotation.status === "Rejected") && (
                         <div>
-                        <p>Notification sent!</p>
+                        <p>{t.notificationSent}</p>
                         </div>
                     )}
                     </div>
@@ -349,16 +423,16 @@ const QuotationManagement = () => {
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
         >
-          Previous
+          {t.previous}
         </button>
 
-        <span>Page {currentPage} of {totalPages}</span>
+        <span>{t.page} {currentPage} {t.of} {totalPages}</span>
 
         <button
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
         >
-          Next
+          {t.next}
         </button>
       </div>
     </div>

@@ -1,12 +1,13 @@
 /* Container styles */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f4f6f8;
-    font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #eef2f3, #8e9eab);
+  font-family: 'Helvetica', sans-serif;
+  padding: 40px;
   }
   
   .login-container h2 {
@@ -22,7 +23,7 @@
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 80%;
   }
   
   .login-form label {
@@ -48,20 +49,26 @@
   
   /* Button styles */
   .login-button {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #4CAF50, #2E8B57); /* Gradient from green to dark green */
     color: #fff;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 14px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 17px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
   }
   
   .login-button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #2E8B57, #4CAF50); /* Inverted green gradient on hover */
+    transform: translateY(-4px); /* Button lift effect */
   }
   
+  .login-button:active{
+    transform: translateY(1px); 
+  }
+
   /* Error message */
   .error-message {
     color: red;

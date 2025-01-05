@@ -25,6 +25,7 @@ import {
   PointElement,
   LineElement, // Import LineElement
 } from "chart.js";
+import { useLanguage } from "../context/LanguageContext";
 
 // Register chart elements
 ChartJS.register(
@@ -61,6 +62,89 @@ const DealerDashboard = () => {
    const [referralId, setReferralId] = useState('');
    const [referralSearchTerm, setReferralSearchTerm] = useState("");
    const [filteredReferralHistory, setFilteredReferralHistory] = useState([]);
+   const { language } = useLanguage();
+
+  const translations = {
+    en: {
+      myOrders: "My Orders",
+      welcome: "Welcome",
+      searchOrders: "Search orders...",
+      manageOrders: "Manage Orders",
+      noOrdersFound: "No orders found.",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of",
+      earnings: "Earnings",
+      totalEarnings: "Total Earnings",
+      referrals: "Referrals",
+      searchReferrals: "Search referrals...",
+      addReferral: "Add Referral",
+      referralId: "Referral ID",
+      all: "All",
+      noReferrals: "No users have joined using your referral code.",
+      name: "Name",
+      email: "Email",
+      role: "Role",
+      reports: "Reports",
+      earningsOverTime: "Earnings Over Time",
+      ordersByStatus: "Orders by Status",
+      approved: "Approved",
+      pending: "Pending",
+      rejected: "Rejected",
+      orderId: "Order ID",
+      product: "Product",
+      status: "Status",
+      deliveredToAdmin: "Delivered to admin",
+      estimatedPrice: "Estimated Price",
+      commission: "Commission",
+      commissionPercentage: "Commission Percentage(%)",
+      paymentStatus: "Payment Status",
+      nA: "N/A",
+      viewDetails: "View details",
+    },
+    fr: {
+      myOrders: "Mes commandes",
+      welcome: "Bienvenue",
+      searchOrders: "Rechercher des commandes...",
+      manageOrders: "Gérer les commandes",
+      noOrdersFound: "Aucune commande trouvée.",
+      previous: "Précédent",
+      next: "Suivant",
+      page: "Page",
+      of: "sur",
+      earnings: "Gains",
+      totalEarnings: "Gains totaux",
+      referrals: "Références",
+      searchReferrals: "Rechercher des références...",
+      addReferral: "Ajouter une référence",
+      referralId: "ID de parrainage",
+      all: "Tout",
+      noReferrals: "Aucun utilisateur n'a rejoint avec votre code de parrainage.",
+      name: "Nom",
+      email: "E-mail",
+      role: "Rôle",
+      reports: "Rapports",
+      earningsOverTime: "Gains au fil du temps",
+      ordersByStatus: "Commandes par statut",
+      approved: "Approuvé",
+      pending: "En attente",
+      rejected: "Rejeté",
+      orderId: "ID de commande",
+      product: "Produit",
+      status: "Statut",
+      deliveredToAdmin: "Livré à l'administration",
+      estimatedPrice: "Prix estimé",
+      commission: "Commission",
+      commissionPercentage: "Pourcentage de commission (%)",
+      paymentStatus: "Statut de paiement",
+      nA: "N/D",
+      viewDetails: "Voir les détails",
+    },
+  };
+
+  const t = translations[language];
+
 
 
   useEffect(() => {
@@ -251,29 +335,31 @@ const DealerDashboard = () => {
   };
 
   const OrderItem = ({ order }) => (
-    <div className="order-item" onClick={() => navigate(`/order/${order.id}`)}>
-      <p>
-        <strong>Order ID:</strong> #{order.orderNumber || "N/A"}
-      </p>
-      <p>
-        <strong>Product:</strong> {order.product?.productName || "N/A"}
-      </p>
-      <p>
-        <strong>Status:</strong> {order.status || "Delivered to admin"}
-      </p>
-      <p>
-        <strong>Estimated Price:</strong> ₹{order.estimatePrice || 0}.00
-      </p>
-      <p>
-        <strong>Commission:</strong> ₹{order.commissionValue || 0}.00
-      </p>
-      <p>
-        <strong>Commission Percentage(%):</strong> {order.commissionPercentage || 0}%
-      </p>
-      <p>
-        <strong>Payment Status:</strong> {order.paymentStatus || 0}
-      </p>
-    </div>
+    <div className="order-item" >
+  <p>
+    <strong>{t.orderId}:</strong> #{order.orderNumber || t.nA}
+  </p>
+  <p>
+    <strong>{t.product}:</strong> {order.product?.productName || t.nA}
+  </p>
+  <p>
+    <strong>{t.status}:</strong> {order.status || t.deliveredToAdmin}
+  </p>
+  <p>
+    <strong>{t.estimatedPrice}:</strong> ₹{order.estimatePrice || 0}.00
+  </p>
+  <p>
+    <strong>{t.commission}:</strong> ₹{order.commissionValue || 0}.00
+  </p>
+  <p>
+    <strong>{t.commissionPercentage}:</strong> {order.commissionPercentage || 0}%
+  </p>
+  <p>
+    <strong>{t.paymentStatus}:</strong> {order.paymentStatus || t.nA}
+  </p>
+  <button className="view-order-details-btn" onClick={() => navigate(`/order/${order.id}`)}>{t.viewDetails}</button>
+</div>
+
   );
 
   // Prepare chart data
@@ -291,7 +377,7 @@ const DealerDashboard = () => {
     labels: earningsOverTime.map((entry) => entry.date),
     datasets: [
       {
-        label: "Earnings",
+        label: t.earnings,
         data: earningsOverTime.map((entry) => entry.earnings),
         backgroundColor: "rgba(54, 162, 235, 0.5)",
         borderColor: "rgba(54, 162, 235, 1)",
@@ -301,10 +387,10 @@ const DealerDashboard = () => {
   };
 
   const orderStatusData = {
-    labels: ["Approved", "Pending", "Rejected"], // Updated labels
+    labels: [t.approved, t.pending, t.rejected], // Updated labels
     datasets: [
       {
-        label: "Orders by Status",
+        label: t.ordersByStatus,
         data: [
           ordersByStatus["Approved"] || 0,
           ordersByStatus["Pending"] || 0,
@@ -332,30 +418,26 @@ const DealerDashboard = () => {
 
   return (
     <div className="dealer-dashboard-container">
-      <div className="dashboard-header1">
-        <h1>Dealer Dashboard</h1>
-      </div>
       {loading ? (
-        <p>Loading...</p>
+        <p>{t.loading}</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <div>
-          <h2>Welcome, {dealerName}</h2>
-
           {/* My Orders Section */}
           <div className="dealer-dashboard-section">
             <div className="dealer-dashboard-header">
-            <h3>My Orders</h3>
+            <h3>{t.myOrders}</h3>
+            <h2>{t.welcome}, {dealerName}</h2>
             <div className="search-filter">
                 <input
                   type="text"
-                  placeholder="Search orders..."
+                  placeholder={t.searchOrders}
                   value={searchTerm}
                   onChange={handleSearch}
                 />
 
-                <button className="dealer-dashboard-button" onClick= {handleManageOrders}>Manage orders</button>
+                <button className="dealer-dashboard-button" onClick= {handleManageOrders}>{t.manageOrders}</button>
               </div>
             </div>
             <div className="container1">
@@ -363,7 +445,7 @@ const DealerDashboard = () => {
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => <OrderItem key={order.id} order={order} />)
               ) : (
-                <p>No orders found.</p>
+                <p>{t.noOrdersFound}</p>
               )}
             </div>
             {/* Pagination */}
@@ -373,17 +455,17 @@ const DealerDashboard = () => {
                 disabled={currentPage === 1}
                 className="dealer-pagination-button"
               >
-                Previous
+                {t.previous}
               </button>
               <span>
-                Page {currentPage} of {totalPages}
+                {t.page} {currentPage} {t.of} {totalPages}
               </span>
               <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
                 className="dealer-pagination-button"
               >
-                Next
+                {t.next}
               </button>
             </div>
           </div>
@@ -391,11 +473,11 @@ const DealerDashboard = () => {
           {/* Earnings Section */}
           <div className="dealer-dashboard-section">
             <div className="dealer-dashboard-header">
-            <h3>Earnings</h3>
+            <h3>{t.earnings}</h3>
             </div>
             <div className="container1">
               <p>
-                <strong>Total Earnings:</strong> ₹{totalCommission || 0}
+                <strong>{t.totalEarnings}:</strong> ₹{totalCommission || 0}
               </p>
             </div>
           </div>
@@ -406,36 +488,36 @@ const DealerDashboard = () => {
               {/* Referrals Section */}
                 <div className="dealer-dashboard-section">
                   <div className="dealer-dashboard-header">
-                  <strong className="ref-h3">Referrals</strong>
+                  <strong className="ref-h3">{t.referrals}</strong>
                   <div className="search-filter">
                     <input
                       type="text"
-                      placeholder="Search referrals..."
+                      placeholder={t.searchReferrals}
                       value={referralSearchTerm}
                       onChange={handleReferralSearch}
                     />
 
-                    <button className="dealer-dashboard-button">Add Referral</button>
+                    <button className="dealer-dashboard-button">{t.addReferral}</button>
                   </div>
                   </div>
                   <div style={{display:'flex', justifyContent:'space-between'}}>
                   <p>
-                    <strong>Referral ID:</strong> {referralData.referralId || "N/A"}{""}
+                    <strong>{t.referralId}:</strong> {referralData.referralId || "N/A"}{""}
                   </p>{""}
-                  <p><strong>  All</strong>({referralHistory.length})</p> 
+                  <p><strong>  {t.all}</strong>({referralHistory.length})</p> 
                  </div>
               
 
 
               {filteredReferralHistory.length === 0 ? (
-              <p>No users have joined using your referral code.</p>
+              <p>{t.noReferrals}</p>
             ) : (
               <ul className="referral-history-list">
                 {referralHistory.map((user, index) => (
                   <li key={index} className="referral-history-item">
-                    <p><strong>Name:</strong> {user.name}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Role:</strong> {user.role}</p>
+                    <p><strong>{t.name}:</strong> {user.name}</p>
+                    <p><strong>{t.email}:</strong> {user.email}</p>
+                    <p><strong>{t.role}:</strong> {user.role}</p>
                   </li>
                 ))}
               </ul>
@@ -446,15 +528,15 @@ const DealerDashboard = () => {
           {/* Reports Section */}
           <div className="dealer-dashboard-section">
             <div className="dealer-dashboard-header">
-            <h3>Reports</h3>
+            <h3>{t.reports}</h3>
             </div>
             <div className="chart-container">
               <div>
-                <h4>Earnings Over Time</h4>
+                <h4>{t.earningsOverTime}</h4>
                 <Line data={earningsData} ref={lineChartRef} />
               </div>
               <div>
-                <h4>Orders by Status</h4>
+                <h4>{t.ordersByStatus}</h4>
                 <Pie data={orderStatusData} ref={pieChartRef} />
               </div>
             </div>
